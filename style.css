@@ -47,9 +47,11 @@ body {
 .topic-route {
   color:#ff0;
 }
-.topic-vehType,
-.topic-vehID {
+.topic-vehType{
   color:#f5f;
+}
+.topic-vehID {
+  color: #ffdb55;
 }
 .topic-lat,
 .topic-lon {
