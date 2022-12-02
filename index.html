@@ -9,16 +9,38 @@
 
 <body>
   <div id="map"></div>
+  <div id="real-time-topics">
+    <table>
+      <tr>
+        <td>
+          <div id="topic-pattern" class="topic-string">
+            acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lon}/{dir}/{status}
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div id="topic" class="topic-string">&nbsp;</div>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <div id="sub" class="topic-string">&nbsp;</div>
+        </td>
+      </tr>
+    </table>
+  </div>
+
 
   <!-- 
      The `defer` attribute causes the callback to execute after the full HTML
      document has been parsed. For non-blocking uses, avoiding race conditions,
      and consistent behavior across browsers, consider loading using Promises
      with https://www.npmjs.com/package/@googlemaps/js-api-loader.
-    -->
   <script
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2Lx4NftTlKl8d5mvekVgYf6nRzzusQHQ&callback=initMap&libraries=marker,places&v=beta"
     defer></script>
+    -->
 </body>
 
 </html>

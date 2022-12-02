@@ -19,3 +19,45 @@ body {
 [class$=api-load-alpha-banner] {
   display: none;
 }
+
+#real-time-topics {
+  position: fixed;
+  bottom: 10px;
+  left: 50%;
+  z-index: 101;
+  margin-left: -450px;
+  background-color: rgba(51, 51, 51, 0.8);
+  border: 1px solid #00c895;
+  padding: 10px;
+  line-height: 30px;
+}
+
+.topic-string{
+  font-family:  Monaco, "Lucida Console", monospace; 
+  font-size: small;
+  color: #aaa; 
+}
+
+.topic-app {
+  color:#5f5;
+}
+.topic-ver {
+  color:#58f;
+}
+.topic-route {
+  color:#ff0;
+}
+.topic-vehType,
+.topic-vehID {
+  color:#f5f;
+}
+.topic-lat,
+.topic-lon {
+  color:#f71
+}
+.topic-dir {
+  color:#0ff;
+}
+.topic-status {
+  color:#fff;
+}
