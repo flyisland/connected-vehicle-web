@@ -20,6 +20,22 @@ body {
   display: none;
 }
 
+div#curt-status-block {
+  position: absolute;
+  bottom: 32px;
+  left: 10px;
+  z-index: 98;
+  background-color: rgba(61, 61, 61, 0.8);
+  padding: 10px;
+  border: 1px solid #00c895;
+}
+
+div#curt-status-block td{
+  font: medium Roboto, sans-serif;
+  color: white;
+  padding: 2px;
+}
+
 #real-time-topics {
   position: fixed;
   bottom: 10px;
