@@ -10,11 +10,17 @@ const vc = {
     vc.start()
   },
 
+  topicTag: null,
+  msgRateTag: null,
   start: function () {
+    vc.topicTag = document.getElementById("topic")
+    vc.msgRateTag = document.getElementById("msg_rate")
+
     msgController.onMessage = function (message) {
       vc.onMessage(message)
     }
     msgController.connect()
+    setInterval(() => { vc.updateMsgRate() }, 1000)
   },
 
   vehicles: {},
@@ -33,14 +39,18 @@ const vc = {
     veh["marker"].position = { lat: vehMsg.payload.lat, lng: vehMsg.payload.lng }
   },
 
-  topicTag: null,
   updateTopic: function (topic) {
-    if (vc.topicTag == null) {
-      vc.topicTag = document.getElementById("topic")
-    }
-    vc.topicTag.innerHTML =
-      colorTopic(topic)
+    vc.topicTag.innerHTML = colorTopic(topic)
   },
+
+  lastMsgAmount: 0,
+  lastTs: Date.now(),
+  updateMsgRate: function () {
+    let nowTs = Date.now()
+    let secs = (nowTs - vc.lastTs) / 1000
+    let rate = Math.round((vc.msgAmount - vc.lastMsgAmount) / secs)
+    vc.msgRateTag.innerText = `${rate}`
+  }
 }
 
 export { vc as default }
