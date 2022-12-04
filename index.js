@@ -1,4 +1,5 @@
 import appConfig from "./config.mjs"
+import messaging from "./messaging.js"
 
 function initMap() {
   const map = new google.maps.Map(document.getElementById("map"), appConfig.mapOptions);
@@ -36,7 +37,9 @@ function colorTopic(topic) {
   return levelSpans.join(topicSeparator)
 }
 
+log.setLevel(appConfig.logLevel)
 window.initMap = initMap;
 document.getElementById("topic-pattern").innerHTML =
   colorTopic("acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lon}/{dir}/{status}")
 
+messaging.connect()
