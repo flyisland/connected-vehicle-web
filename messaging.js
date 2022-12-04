@@ -11,6 +11,7 @@ solace.SolclientFactory.setLogLevel(appConfig.solace.LogLevel);
 
 class Messaging {
   session = null
+  onMessage = null
 
   connect() {
     log.info('Connecting to Solace PubSub+ Event Broker using url: ' + appConfig.solace.SessionProperties.url);
@@ -23,9 +24,10 @@ class Messaging {
       log.error(err.toString());
     }
     // define session event listeners
+    const that = this
     this.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
       log.info('=== Successfully connected and ready to subscribe. ===');
-      setTimeout(() => { messaging.subscribe() }, 0);
+      setTimeout(() => { that.subscribe() }, 0);
     });
     this.session.on(solace.SessionEventCode.CONNECT_FAILED_ERROR, function (sessionEvent) {
       log.error('Connection failed to the message router: ' + sessionEvent.infoStr +
@@ -33,21 +35,21 @@ class Messaging {
     });
     this.session.on(solace.SessionEventCode.DISCONNECTED, function (sessionEvent) {
       log.info('Disconnected.');
-      if (this.session !== null) {
-        this.session.dispose();
-        this.session = null;
+      if (that.session !== null) {
+        that.session.dispose();
+        that.session = null;
       }
     });
     this.session.on(solace.SessionEventCode.SUBSCRIPTION_ERROR, function (sessionEvent) {
       log.warn('Cannot subscribe to topic: ' + sessionEvent.correlationKey);
     });
-    this.session.on(solace.SessionEventCode.SUBSCRIPTION_OK, function (sessionEvent) {
-      log.info('SUBSCRIPTION_OK: ' + sessionEvent)
-    });
+
     // define message event listener
     this.session.on(solace.SessionEventCode.MESSAGE, function (message) {
-      log.info('Received message: "' + message.getBinaryAttachment() + '", details:\n' +
-        message.dump());
+      let msg = {}
+      msg.topic = message.getDestination().name
+      msg.payload = JSON.parse(that.getTextPayload(message))
+      that.onMessage(msg)
     });
 
     // actually connect to the broker
@@ -68,6 +70,16 @@ class Messaging {
       log.error(error.toString());
     }
   }
+
+
+  getTextPayload(message) {
+    if (message.getType() == solace.MessageType.TEXT) {
+      return message.getSdtContainer().getValue();
+    } else {
+      return message.getBinaryAttachment(); // binary attachment, all text
+    }
+  }
+
 }
 
 let messaging = new Messaging()

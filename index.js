@@ -42,4 +42,7 @@ window.initMap = initMap;
 document.getElementById("topic-pattern").innerHTML =
   colorTopic("acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lon}/{dir}/{status}")
 
+messaging.onMessage = function (message) {
+  log.info(JSON.stringify(message))
+}
 messaging.connect()
