@@ -1,18 +1,8 @@
 import appConfig from "./config.mjs"
-import msgController from "./messaging.js"
-
-var map
-function initMap() {
-  map = new google.maps.Map(document.getElementById("map"), appConfig.mapOptions);
-
-  const markerView = new google.maps.marker.AdvancedMarkerView({
-    map,
-    position: appConfig.mapOptions.center,
-  });
-}
+import vehicleController from "./vehicle.js"
 
 const topicSeparator = "/"
-// acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lon}/{dir}/{status}
+// acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lng}/{dir}/{status}
 const topicLevels = {
   // start with ZERO
   2: "app",
@@ -21,7 +11,7 @@ const topicLevels = {
   5: "vehType",
   6: "vehID",
   7: "lat",
-  8: "lon",
+  8: "lng",
   9: "dir",
   10: "status",
 }
@@ -38,12 +28,11 @@ function colorTopic(topic) {
   return levelSpans.join(topicSeparator)
 }
 
-log.setLevel(appConfig.logLevel)
-window.initMap = initMap;
-document.getElementById("topic-pattern").innerHTML =
-  colorTopic("acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lon}/{dir}/{status}")
 
-msgController.onMessage = function (message) {
-  log.info(JSON.stringify(message))
-}
-msgController.connect()
+document.getElementById("topic-pattern").innerHTML =
+  colorTopic("acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lng}/{dir}/{status}")
+
+log.setLevel(appConfig.logLevel)
+window.initMap = vehicleController.initMap;
+vehicleController.start()
+

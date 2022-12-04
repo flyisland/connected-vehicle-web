@@ -2,7 +2,7 @@
  * Always set the map height explicitly to define the size of the div element
  * that contains the map. 
  */
- #map {
+#map {
   height: 100%;
 }
 
@@ -16,7 +16,7 @@ body {
   padding: 0;
 }
 
-[class$=api-load-alpha-banner] {
+[class$="api-load-alpha-banner"] {
   display: none;
 }
 
@@ -30,7 +30,7 @@ div#curt-status-block {
   border: 1px solid #00c895;
 }
 
-div#curt-status-block td{
+div#curt-status-block td {
   font: medium Roboto, sans-serif;
   color: white;
   padding: 2px;
@@ -48,34 +48,34 @@ div#curt-status-block td{
   line-height: 30px;
 }
 
-.topic-string{
-  font-family:  Monaco, "Lucida Console", monospace; 
+.topic-string {
+  font-family: Monaco, "Lucida Console", monospace;
   font-size: small;
-  color: #aaa; 
+  color: #aaa;
 }
 
 .topic-app {
-  color:#5f5;
+  color: #5f5;
 }
 .topic-ver {
-  color:#58f;
+  color: #58f;
 }
 .topic-route {
-  color:#ff0;
+  color: #ff0;
 }
-.topic-vehType{
-  color:#f5f;
+.topic-vehType {
+  color: #f5f;
 }
 .topic-vehID {
   color: #ffdb55;
 }
 .topic-lat,
-.topic-lon {
-  color:#f71
+.topic-lng {
+  color: #f71;
 }
 .topic-dir {
-  color:#0ff;
+  color: #0ff;
 }
 .topic-status {
-  color:#fff;
+  color: #fff;
 }
