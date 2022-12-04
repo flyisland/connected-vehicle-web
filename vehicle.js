@@ -50,6 +50,8 @@ const vc = {
     let secs = (nowTs - vc.lastTs) / 1000
     let rate = Math.round((vc.msgAmount - vc.lastMsgAmount) / secs)
     vc.msgRateTag.innerText = `${rate}`
+    vc.lastMsgAmount = vc.msgAmount
+    vc.lastTs = nowTs
   }
 }
 
