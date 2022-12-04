@@ -1,8 +1,9 @@
 import appConfig from "./config.mjs"
-import messaging from "./messaging.js"
+import msgController from "./messaging.js"
 
+var map
 function initMap() {
-  const map = new google.maps.Map(document.getElementById("map"), appConfig.mapOptions);
+  map = new google.maps.Map(document.getElementById("map"), appConfig.mapOptions);
 
   const markerView = new google.maps.marker.AdvancedMarkerView({
     map,
@@ -42,7 +43,7 @@ window.initMap = initMap;
 document.getElementById("topic-pattern").innerHTML =
   colorTopic("acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lon}/{dir}/{status}")
 
-messaging.onMessage = function (message) {
+msgController.onMessage = function (message) {
   log.info(JSON.stringify(message))
 }
-messaging.connect()
+msgController.connect()
