@@ -26,7 +26,7 @@ const vc = {
   vehicles: {},
   msgAmount: 0,
   onMessage: function (vehMsg) {
-    this.msgAmount++
+    vc.msgAmount++
     vc.updateTopic(vehMsg.topic)
 
     if (map == null) return;
