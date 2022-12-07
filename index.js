@@ -1,5 +1,5 @@
 import appConfig from "./config.mjs"
-import vehicleController from "./vehicle.js"
+import vehicleController from "./controller.js"
 import { colorTopic } from "./misc.js"
 
 document.getElementById("topic-pattern").innerHTML =
