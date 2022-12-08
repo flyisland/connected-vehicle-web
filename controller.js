@@ -9,8 +9,7 @@ const vc = {
   initMap: function () {
     vc.map = new google.maps.Map(document.getElementById("map"), appConfig.mapOptions);
     google.maps.event.addListener(vc.map, 'zoom_changed', function () {
-      vc.zoomLevel = vc.map.getZoom();
-      log.debug(`zoom=${vc.zoomLevel}`)
+      vc.onZoomChanged(vc.map.getZoom())
     });
 
     vc.init()
@@ -43,7 +42,7 @@ const vc = {
     if (map == null) return;
     let veh = null
     if (!(vehMsg.payload.vehID in vc.vehicles)) {
-      vc.vehicles[vehMsg.payload.vehID] = new Vehicle(vehMsg)
+      vc.vehicles[vehMsg.payload.vehID] = new Vehicle(vehMsg, vc.map)
     }
     veh = vc.vehicles[vehMsg.payload.vehID]
     veh.onMessage(vehMsg)
@@ -54,6 +53,15 @@ const vc = {
     vc.topicTag.innerHTML = colorTopic(topic)
   },
 
+
+  onZoomChanged: function (zoomLevel) {
+    vc.zoomLevel = zoomLevel;
+    log.debug(`zoom=${vc.zoomLevel}`)
+
+    for (const v of vc.vehicles) {
+      v.onZoomChanged(vc.zoomLevel)
+    }
+  },
 
   updateRealTimeTopics: function () {
     vc.updateMsgRate()
