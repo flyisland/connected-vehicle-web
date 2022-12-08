@@ -1,5 +1,6 @@
 import appConfig from "./config.mjs"
 import msgController from "./messaging.js"
+import Vehicle from "./vehicle.js"
 import { colorTopic } from "./misc.js"
 
 // vehicleController
@@ -7,16 +8,25 @@ const vc = {
   map: null,
   initMap: function () {
     vc.map = new google.maps.Map(document.getElementById("map"), appConfig.mapOptions);
+    google.maps.event.addListener(vc.map, 'zoom_changed', function () {
+      vc.zoomLevel = vc.map.getZoom();
+      log.debug(`zoom=${vc.zoomLevel}`)
+    });
+
+    vc.init()
     vc.start()
   },
 
-  topicTag: null,
-  msgRateTag: null,
-  start: function () {
+  init: function () {
     vc.topicTag = document.getElementById("topic")
     vc.msgRateTag = document.getElementById("msg_rate")
     vc.totalVehiclesTag = document.getElementById("total_vehicles")
 
+    // https://groups.google.com/g/google-maps-js-api-v3/c/hDRO4oHVSeM
+    vc.zoomLevel = appConfig.mapOptions.zoom
+  },
+
+  start: function () {
     msgController.onMessage = function (message) {
       vc.onMessage(message)
     }
@@ -33,11 +43,11 @@ const vc = {
     if (map == null) return;
     let veh = null
     if (!(vehMsg.payload.vehID in vc.vehicles)) {
-      const markerView = new google.maps.marker.AdvancedMarkerView({ map: vc.map, });
-      vc.vehicles[vehMsg.payload.vehID] = { "marker": markerView, }
+      vc.vehicles[vehMsg.payload.vehID] = new Vehicle(vehMsg)
     }
     veh = vc.vehicles[vehMsg.payload.vehID]
-    veh["marker"].position = { lat: vehMsg.payload.lat, lng: vehMsg.payload.lng }
+    veh.onMessage(vehMsg)
+    veh.onZoomChanged(vc.zoomLevel)
   },
 
   updateTopic: function (topic) {

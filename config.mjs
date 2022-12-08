@@ -26,6 +26,15 @@ const config = {
     // FATAL: 0, ERROR: 1, WARN: 2, INFO: 3, DEBUG: 4, TRACE: 5
     // NOTICE: works only with "solclientjs-debug.js"
     LogLevel: 1,
+  },
+
+  iconBase: "./images/",
+  vehicles: {
+    "HAUL": {
+      type: "HAUL",
+      reportInterval: 3, // seconds
+      icon: "haul.svg"
+    },
   }
 }
 
