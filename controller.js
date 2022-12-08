@@ -65,4 +65,4 @@ const vc = {
   }
 }
 
-export { vc as default }
+export { vc as vehicleController }
