@@ -15,12 +15,13 @@ const vc = {
   start: function () {
     vc.topicTag = document.getElementById("topic")
     vc.msgRateTag = document.getElementById("msg_rate")
+    vc.totalVehiclesTag = document.getElementById("total_vehicles")
 
     msgController.onMessage = function (message) {
       vc.onMessage(message)
     }
     msgController.connect()
-    setInterval(() => { vc.updateMsgRate() }, 1000)
+    setInterval(() => { vc.updateRealTimeTopics() }, 1000)
   },
 
   vehicles: {},
@@ -43,6 +44,12 @@ const vc = {
     vc.topicTag.innerHTML = colorTopic(topic)
   },
 
+
+  updateRealTimeTopics: function () {
+    vc.updateMsgRate()
+    vc.updateTotalVehicles()
+  },
+
   lastMsgAmount: 0,
   lastTs: Date.now(),
   updateMsgRate: function () {
@@ -52,6 +59,9 @@ const vc = {
     vc.msgRateTag.innerText = `${rate}`
     vc.lastMsgAmount = vc.msgAmount
     vc.lastTs = nowTs
+  },
+  updateTotalVehicles: function () {
+    vc.totalVehiclesTag.innerText = Object.keys(vc.vehicles).length.toString()
   }
 }
 
