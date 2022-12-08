@@ -8,6 +8,7 @@ export default class Vehicle {
   constructor(vehMsg, map) {
     Object.assign(this, vehMsg)
     this.map = map
+    this.bodyLength = appConfig.vehicles[vehMsg.payload.vehType].bodyLength
 
     const imgTag = document.createElement("img");
     imgTag.src = appConfig.iconBase + appConfig.vehicles[vehMsg.payload.vehType].icon
@@ -25,6 +26,11 @@ export default class Vehicle {
   }
 
   onZoomChanged(zoomLevel) {
-    this.marker.content.width = 30
+    if (zoomLevel < 15) { return }
+
+    const metersPerPx = metersPerPxOnZoomZero / Math.pow(2, zoomLevel)
+    let bodyLength = this.bodyLength
+    if (zoomLevel < 18) { bodyLength = bodyLength * 2 }
+    this.marker.content.width = Math.round(bodyLength / metersPerPx)
   }
 }

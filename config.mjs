@@ -33,7 +33,8 @@ const config = {
     "HAUL": {
       type: "HAUL",
       reportInterval: 3, // seconds
-      icon: "haul.svg"
+      icon: "haul.svg",
+      bodyLength: 15, // meters
     },
   }
 }
