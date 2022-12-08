@@ -42,11 +42,13 @@ const vc = {
     if (map == null) return;
     let veh = null
     if (!(vehMsg.payload.vehID in vc.vehicles)) {
-      vc.vehicles[vehMsg.payload.vehID] = new Vehicle(vehMsg, vc.map)
+      veh = new Vehicle(vehMsg, vc.map)
+      veh.onZoomChanged(vc.zoomLevel)
+      vc.vehicles[vehMsg.payload.vehID] = veh
+    } else {
+      veh = vc.vehicles[vehMsg.payload.vehID]
     }
-    veh = vc.vehicles[vehMsg.payload.vehID]
     veh.onMessage(vehMsg)
-    veh.onZoomChanged(vc.zoomLevel)
   },
 
   updateTopic: function (topic) {
@@ -58,7 +60,7 @@ const vc = {
     vc.zoomLevel = zoomLevel;
     log.debug(`zoom=${vc.zoomLevel}`)
 
-    for (const v of vc.vehicles) {
+    for (const [k, v] of Object.entries(vc.vehicles)) {
       v.onZoomChanged(vc.zoomLevel)
     }
   },
