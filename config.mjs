@@ -35,6 +35,7 @@ const config = {
       reportInterval: 3, // seconds
       icon: "haul.svg",
       bodyLength: 15, // meters
+      infoImage: "haul-truck-info.jpeg"
     },
   }
 }

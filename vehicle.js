@@ -1,6 +1,6 @@
 
 import appConfig from "./config.mjs"
-
+import { colorTopic } from "./misc.js"
 
 export default class Vehicle {
   constructor(vehMsg, map) {
@@ -11,10 +11,21 @@ export default class Vehicle {
     const imgTag = document.createElement("img");
     imgTag.src = appConfig.iconBase + this.config.icon
     imgTag.style.filter = "drop-shadow(0 0 3mm black)"
-    this.marker = new google.maps.marker.AdvancedMarkerView({
+    const marker = new google.maps.marker.AdvancedMarkerView({
       map: this.map,
       content: imgTag
     });
+    const infoWindow = new google.maps.InfoWindow({
+      content: ""
+    })
+    marker.addListener("click", () => {
+      infoWindow.open({
+        anchor: marker,
+        map,
+      });
+    });
+    this.marker = marker
+    this.infoWindow = infoWindow
   }
 
   onMessage(vehMsg) {
@@ -22,6 +33,9 @@ export default class Vehicle {
     this.marker.position = { lat: this.payload.lat, lng: this.payload.lng }
     this.marker.content.style.transform = `rotate(${this.payload.heading}deg)`
     this.marker.content.style.opacity = 1
+
+    this.infoWindow.setContent(this.buildInfoContent())
+
     this.lastTs = Date.now()
   }
 
@@ -49,5 +63,19 @@ export default class Vehicle {
     } else if (elapse >= this.config.reportInterval * 1000 * 1.5) {
       this.marker.content.style.opacity = 0.7
     }
+  }
+
+  buildInfoContent() {
+    return `<div class="info-box">
+  <div class="info-title">Vehicle: ${this.payload.vehID}</div>
+
+  <div class="info-topic">${colorTopic(this.topic)}</div>
+  <div class="info-body">
+    <div>
+      <pre>${JSON.stringify(this.payload, null, 2)}</pre>
+    </div>
+    <div><img class="info-img" src="${appConfig.iconBase + this.config.infoImage}"></div>
+  </div>
+</div>`
   }
 }
