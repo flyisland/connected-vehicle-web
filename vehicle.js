@@ -6,10 +6,10 @@ export default class Vehicle {
   constructor(vehMsg, map) {
     Object.assign(this, vehMsg)
     this.map = map
-    this.bodyLength = appConfig.vehicles[vehMsg.payload.vehType].bodyLength
+    this.config = appConfig.vehicles[vehMsg.payload.vehType]
 
     const imgTag = document.createElement("img");
-    imgTag.src = appConfig.iconBase + appConfig.vehicles[vehMsg.payload.vehType].icon
+    imgTag.src = appConfig.iconBase + this.config.icon
     imgTag.style.filter = "drop-shadow(0 0 3mm black)"
     this.marker = new google.maps.marker.AdvancedMarkerView({
       map: this.map,
@@ -28,7 +28,7 @@ export default class Vehicle {
   // calculate the icon's size in pixel according to the zoom level of google
   // map and the body length
   onZoomChanged(zoomLevel) {
-    let bodyLength = this.bodyLength
+    let bodyLength = this.config.bodyLength
     // when (zoomLevel < 18), double the vehicle length
     if (zoomLevel < 18) { bodyLength = bodyLength * 2 }
     // when (zoomLevel < 15), the icon's size is too small, so we keep the
