@@ -37,6 +37,13 @@ const config = {
       bodyLength: 15, // meters
       infoImage: "haul-truck-info.jpeg"
     },
+    "WATER": {
+      type: "WATER",
+      reportInterval: 3, // seconds
+      icon: "water.svg",
+      bodyLength: 15, // meters
+      infoImage: "water-truck-info.png"
+    },
   }
 }
 
