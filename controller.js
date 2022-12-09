@@ -31,6 +31,7 @@ const vc = {
     }
     msgController.connect()
     setInterval(() => { vc.updateRealTimeTopics() }, 1000)
+    setInterval(() => { vc.checkInactiveVehicles() }, 500)
   },
 
   vehicles: {},
@@ -39,7 +40,7 @@ const vc = {
     vc.msgAmount++
     vc.updateTopic(vehMsg.topic)
 
-    if (map == null) return;
+    if (vc.map == null) return;
     let veh = null
     if (!(vehMsg.payload.vehID in vc.vehicles)) {
       veh = new Vehicle(vehMsg, vc.map)
@@ -82,7 +83,17 @@ const vc = {
   },
   updateTotalVehicles: function () {
     vc.totalVehiclesTag.innerText = Object.keys(vc.vehicles).length.toString()
-  }
+  },
+
+  checkInactiveVehicles: function () {
+    const nowTs = Date.now()
+    for (const [k, v] of Object.entries(vc.vehicles)) {
+      v.checkActivity(nowTs)
+      if (null == v.marker.map) {
+        delete vc.vehicles[k]
+      }
+    }
+  },
 }
 
 export { vc as vehicleController }

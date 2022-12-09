@@ -21,6 +21,8 @@ export default class Vehicle {
     Object.assign(this, vehMsg)
     this.marker.position = { lat: this.payload.lat, lng: this.payload.lng }
     this.marker.content.style.transform = `rotate(${this.payload.heading}deg)`
+    this.marker.content.style.opacity = 1
+    this.lastTs = Date.now()
   }
 
   // https://groups.google.com/g/google-maps-js-api-v3/c/hDRO4oHVSeM
@@ -36,5 +38,16 @@ export default class Vehicle {
     if (zoomLevel < 15) { zoomLevel = 15 }
     const metersPerPx = Vehicle.metersPerPxOnZoomZero / Math.pow(2, zoomLevel)
     this.marker.content.height = Math.round(bodyLength / metersPerPx)
+  }
+
+  // fake out inactive vehicle
+  checkActivity(nowTs) {
+    const elapse = nowTs - this.lastTs
+    if (elapse >= this.config.reportInterval * 1000 * 2.5) {
+      this.marker.map = null
+    } else if (elapse >= this.config.reportInterval * 1000 * 2) {
+    } else if (elapse >= this.config.reportInterval * 1000 * 1.5) {
+      this.marker.content.style.opacity = 0.7
+    }
   }
 }
