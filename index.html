@@ -24,7 +24,7 @@
     </div>
 
     <div id="filtering" class="dashboard">
-      <p class="header-title">Geo Filtering:</p>
+      <p class="header-title">Topic Wildcard Filtering:</p>
       <table>
         <tr>
           <td>
@@ -44,7 +44,7 @@
               <tr>
                 <td colspan="2">Filter by <span class="topic-status">Status:</span>&nbsp;&nbsp;
                   <select id="status" class="decorated">
-                    <option value="any">Any</option>
+                    <option value="*">Any</option>
                     <option value="OK">In Motion</option>
                     <option value="STOPPED">Stopped</option>
                     <option value="FAULT">Broken Down</option>
@@ -80,7 +80,7 @@
             # of Subscriptions:
           </td>
           <td>
-            <span id='curt_subs'>1</span>
+            <span id='curt_subs'></span>
           </td>
         </tr>
         <tr>
@@ -110,7 +110,7 @@
       </tr>
       <tr>
         <td>
-          <div id="sub" class="topic-string">&nbsp;</div>
+          <div id="sub-topic" class="topic-string">&nbsp;</div>
         </td>
       </tr>
     </table>

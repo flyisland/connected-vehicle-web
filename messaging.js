@@ -13,7 +13,7 @@ var msgController = {
   session: null,
   onMessage: null,
 
-  connect: function () {
+  connect: function (onConnected) {
     log.info('Connecting to Solace PubSub+ Event Broker using url: ' + appConfig.solace.SessionProperties.url);
     log.info('Client username: ' + appConfig.solace.SessionProperties.userName);
     log.info('Solace PubSub+ Event Broker VPN name: ' + appConfig.solace.SessionProperties.vpnName);
@@ -27,7 +27,7 @@ var msgController = {
     const that = this
     msgController.session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
       log.info('=== Successfully connected and ready to subscribe. ===');
-      setTimeout(() => { msgController.subscribe() }, 0);
+      setTimeout(() => { onConnected() }, 0);
     });
     msgController.session.on(solace.SessionEventCode.CONNECT_FAILED_ERROR, function (sessionEvent) {
       log.error('Connection failed to the message router: ' + sessionEvent.infoStr +
@@ -56,9 +56,7 @@ var msgController = {
     msgController.session.connect()
   },
 
-  subscribe: function () {
-    let topicName = "acmeResources/veh_trak/>"
-    log.info('Subscribing to topic: ' + topicName);
+  subscribeTo: function (topicName) {
     try {
       msgController.session.subscribe(
         solace.SolclientFactory.createTopicDestination(topicName),
@@ -66,6 +64,21 @@ var msgController = {
         topicName, // use topic name as correlation key
         10000 // 10 seconds timeout for this operation
       );
+      log.info('Subscribe to topic: ' + topicName);
+    } catch (error) {
+      log.error(error.toString());
+    }
+  },
+
+  unSubscribe: function (topicName) {
+    try {
+      msgController.session.unsubscribe(
+        solace.SolclientFactory.createTopicDestination(topicName),
+        true, // generate confirmation when subscription is added successfully
+        topicName, // use topic name as correlation key
+        10000 // 10 seconds timeout for this operation
+      );
+      log.info('Un-Subscribe topic: ' + topicName);
     } catch (error) {
       log.error(error.toString());
     }

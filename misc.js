@@ -25,4 +25,17 @@ function colorTopic(topic) {
   return levelSpans.join(topicSeparator)
 }
 
-export { colorTopic }
+
+function buildSubscriptionTopic(filter) {
+  const topicList = []
+  for (let i = 4; i <= 10; i++) {
+    if (topicLevels[i] in filter) {
+      topicList.push(filter[topicLevels[i]])
+    } else {
+      topicList.push("*")
+    }
+  }
+  return `acmeResources/veh_trak/gps/v2/` + topicList.join(topicSeparator)
+}
+
+export { colorTopic, buildSubscriptionTopic }

@@ -1,7 +1,7 @@
 import appConfig from "./config.mjs"
 import msgController from "./messaging.js"
 import Vehicle from "./vehicle.js"
-import { colorTopic } from "./misc.js"
+import { colorTopic, buildSubscriptionTopic } from "./misc.js"
 
 // vehicleController
 const vc = {
@@ -16,24 +16,25 @@ const vc = {
     vc.start()
   },
 
+  htmlFilteringIDs: ["route", "vehType", "vehID", "status"],
   init: function () {
     vc.topicTag = document.getElementById("topic")
     vc.msgRateTag = document.getElementById("msg_rate")
     vc.totalVehiclesTag = document.getElementById("total_vehicles")
-
-    // https://groups.google.com/g/google-maps-js-api-v3/c/hDRO4oHVSeM
     vc.zoomLevel = appConfig.mapOptions.zoom
-    for (const eid of ["route", "vehType", "vehID", "status"]) {
+
+    // add event listener of filtering tags
+    vc.htmlFilteringIDs.forEach((eid) => {
       const inputTag = document.querySelector("#" + eid)
-      inputTag.addEventListener('change', () => { log.debug("change event") })
-    }
+      inputTag.addEventListener('change', () => { vc.onFilteringChanged() })
+    })
   },
 
   start: function () {
     msgController.onMessage = function (message) {
       vc.onMessage(message)
     }
-    msgController.connect()
+    msgController.connect(vc.onMessagingConnected)
     setInterval(() => { vc.updateRealTimeTopics() }, 1000)
     setInterval(() => { vc.checkInactiveVehicles() }, 500)
   },
@@ -97,6 +98,52 @@ const vc = {
         delete vc.vehicles[k]
       }
     }
+  },
+
+  onFilteringChanged: function () {
+    const filter = {}
+    vc.htmlFilteringIDs.forEach((eid) => {
+      const inputTag = document.querySelector("#" + eid)
+      if (null == inputTag) {
+        filter[eid] = "*"
+        return
+      }
+      const value = inputTag.value.trim()
+      if (value.length == 0) {
+        filter[eid] = "*"
+      } else {
+        filter[eid] = value
+      }
+    })
+    const subTopic = buildSubscriptionTopic(filter)
+    vc.subscribeTo(subTopic)
+  },
+
+  curtSubList: [],
+  // topicList: a list to string, or string if only one topic to subscribe to
+  subscribeTo: function (topicList) {
+    if (typeof topicList == 'string') {
+      topicList = [topicList]
+    }
+
+    // un-subscribe
+    vc.curtSubList.forEach((topic) => { msgController.unSubscribe(topic) })
+
+    vc.curtSubList = []
+    topicList.forEach((topic) => {
+      msgController.subscribeTo(topic)
+      vc.curtSubList.push(topic)
+    })
+
+    const curtSubsTag = document.querySelector("#curt_subs")
+    curtSubsTag.innerText = vc.curtSubList.length
+
+    const subTopicTag = document.querySelector("#sub-topic")
+    subTopicTag.innerHTML = colorTopic(vc.curtSubList[0])
+  },
+
+  onMessagingConnected: function () {
+    vc.subscribeTo(buildSubscriptionTopic({}))
   },
 }
 
