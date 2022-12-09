@@ -23,6 +23,10 @@ const vc = {
 
     // https://groups.google.com/g/google-maps-js-api-v3/c/hDRO4oHVSeM
     vc.zoomLevel = appConfig.mapOptions.zoom
+    for (const eid of ["route", "vehType", "vehID", "status"]) {
+      const inputTag = document.querySelector("#" + eid)
+      inputTag.addEventListener('change', () => { log.debug("change event") })
+    }
   },
 
   start: function () {

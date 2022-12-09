@@ -10,44 +10,92 @@
 
 <body>
   <div id="map"></div>
-  <div id="curt-status-block">
-    <table>
-      <tr>
-        <td>
-          Recv'd Message Rate:
-        </td>
-        <td style="font-weight: bold;">
-          <span id='msg_rate'>0</span> msg/s
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Tracked Vehicles:
-        </td>
-        <td>
-          <span id='total_vehicles'>0</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          # of Subscriptions:
-        </td>
-        <td>
-          <span id='curt_subs'>1</span>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Coverage Accuracy:
-        </td>
-        <td>
-          <span id='curt_accuracy'>N/A</span>
-        </td>
-      </tr>
-    </table>
+  <div>
+    <div id="solace-header" class="dashboard">
+      <table>
+        <tr>
+          <td>
+            <img width="250" src="./images/Solace_Logo_Green.png" />
+            <p class="header-title">Real-time Connected Vehicle Demo</p>
+            <p class="header-sub-title">Bidirectional IoT Communication using MQTT<br>Advanced Filtering and Routing
+              Capabilities</p>
+          </td>
+      </table>
+    </div>
+
+    <div id="filtering" class="dashboard">
+      <p class="header-title">Geo Filtering:</p>
+      <table>
+        <tr>
+          <td>
+            <table>
+              <tr>
+                <td>Filter by <span class="topic-route">Route</span> number:</td>
+                <td><input type="text" id="route" size="4" /></td>
+              </tr>
+              <tr>
+                <td>Filter by <span class="topic-vehType">Vehicle Type</span>:</td>
+                <td><input type="text" id="vehType" size="4" /></td>
+              </tr>
+              <tr>
+                <td>Filter by <span class="topic-vehID">Vehicle ID</span> number:</td>
+                <td><input type="text" id="vehID" size="4" /></td>
+              </tr>
+              <tr>
+                <td colspan="2">Filter by <span class="topic-status">Status:</span>&nbsp;&nbsp;
+                  <select id="status" class="decorated">
+                    <option value="any">Any</option>
+                    <option value="OK">In Motion</option>
+                    <option value="STOPPED">Stopped</option>
+                    <option value="FAULT">Broken Down</option>
+                  </select>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="curt-status" class="dashboard">
+      <table>
+        <tr>
+          <td>
+            Recv'd Message Rate:
+          </td>
+          <td style="font-weight: bold;">
+            <span id='msg_rate'>0</span> msg/s
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Tracked Vehicles:
+          </td>
+          <td>
+            <span id='total_vehicles'>0</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            # of Subscriptions:
+          </td>
+          <td>
+            <span id='curt_subs'>1</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Coverage Accuracy:
+          </td>
+          <td>
+            <span id='curt_accuracy'>N/A</span>
+          </td>
+        </tr>
+      </table>
+    </div>
   </div>
 
-  <div id="real-time-topics">
+  <div id="real-time-topics" class="dashboard">
     <table>
       <tr>
         <td>
