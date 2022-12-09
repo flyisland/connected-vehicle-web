@@ -1,8 +1,6 @@
 
 import appConfig from "./config.mjs"
 
-// https://groups.google.com/g/google-maps-js-api-v3/c/hDRO4oHVSeM
-const metersPerPxOnZoomZero = 156543.03392 * Math.cos(appConfig.mapOptions.center.lat * Math.PI / 180) // / Math.pow(2, vc.zoomLevel)
 
 export default class Vehicle {
   constructor(vehMsg, map) {
@@ -25,12 +23,18 @@ export default class Vehicle {
     this.marker.content.style.transform = `rotate(${this.payload.heading}deg)`
   }
 
+  // https://groups.google.com/g/google-maps-js-api-v3/c/hDRO4oHVSeM
+  static metersPerPxOnZoomZero = 156543.03392 * Math.cos(appConfig.mapOptions.center.lat * Math.PI / 180) // / Math.pow(2, zoom)
+  // calculate the icon's size in pixel according to the zoom level of google
+  // map and the body length
   onZoomChanged(zoomLevel) {
-    if (zoomLevel < 15) { return }
-
-    const metersPerPx = metersPerPxOnZoomZero / Math.pow(2, zoomLevel)
     let bodyLength = this.bodyLength
+    // when (zoomLevel < 18), double the vehicle length
     if (zoomLevel < 18) { bodyLength = bodyLength * 2 }
-    this.marker.content.width = Math.round(bodyLength / metersPerPx)
+    // when (zoomLevel < 15), the icon's size is too small, so we keep the
+    // icon's size at least on zoomLevel 15
+    if (zoomLevel < 15) { zoomLevel = 15 }
+    const metersPerPx = Vehicle.metersPerPxOnZoomZero / Math.pow(2, zoomLevel)
+    this.marker.content.height = Math.round(bodyLength / metersPerPx)
   }
 }
