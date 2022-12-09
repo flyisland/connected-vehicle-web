@@ -1,9 +1,17 @@
 import appConfig from "./config.mjs"
 import { vehicleController } from "./controller.js"
-import { colorTopic } from "./misc.js"
+import { colorTopic, buildSubscriptionTopic } from "./misc.js"
 
 document.getElementById("topic-pattern").innerHTML =
-  colorTopic("acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lng}/{dir}/{status}")
+  colorTopic(buildSubscriptionTopic({
+    "route": "{route}",
+    "vehType": "{vehType}",
+    "vehID": "{vehID}",
+    "lat": "{lat}",
+    "lng": "{lng}",
+    "heading": "{dir}",
+    "status": "{status}",
+  }))
 
 log.setLevel(appConfig.logLevel)
 window.initMap = vehicleController.initMap;
