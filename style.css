@@ -60,12 +60,20 @@ body {
 #filtering-form {
   display: grid;
   grid-template-columns: 1fr auto ;
+  row-gap: 3px;
   font-size: small;
+}
+
+.dash-input {
+  border: 2px solid #00c895;
+  border-radius: 10px;
+  background-color: rgba(61, 61, 61, 0.8);
 }
 
 #stat-grid {
   display: grid;
   grid-template-columns: 1fr auto ;
+  row-gap: 3px;
   font-size: small;
 }
 
