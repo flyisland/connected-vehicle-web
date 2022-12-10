@@ -1,6 +1,7 @@
 import appConfig from "./config.js"
 import msgController from "./messaging.js"
 import Vehicle from "./vehicle.js"
+import geo from "./geo.js"
 import { colorTopic, buildSubscriptionTopic } from "./misc.js"
 
 // vehicleController
@@ -14,6 +15,7 @@ const vc = {
 
     vc.init()
     vc.start()
+    geo.init(vc.map)
   },
 
   htmlFilteringIDs: ["route", "vehType", "vehID", "status"],
