@@ -2,7 +2,7 @@
  * Always set the map height explicitly to define the size of the div element
  * that contains the map. 
  */
-#map {
+ #map {
   height: 100%;
 }
 
@@ -20,66 +20,64 @@ body {
   display: none;
 }
 
+#dashboard-left {
+  position: absolute;
+  top: 10;
+  left: 10;
+  display: flex;
+  flex-direction: column;
+  width: fit-content;
+}
+
 .dashboard{
   background-color: rgba(61, 61, 61, 0.8);
   padding: 5px;
   border: 1px solid #00c895;
   color: white;
-}
-
-#curt-status {
-  position: absolute;
-  bottom: 32px;
-  left: 10px;
-  z-index: 98;
-}
-
-#curt-status table{
-  color: white;
   font-family: Roboto, sans-serif;
+}
+
+.dash-line-item{
+  margin: auto;
 }
 
 #solace-header {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 98;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
-#solace-header td {
-  text-align: center;
-  font-family: Roboto, sans-serif;
-  color: white;
-}
-
-.header-title {
+.dash-title {
   font-size: medium;
   font-weight: bolder;
-  line-height: 0;
+  margin: 10 auto 10;
 }
-.header-sub-title {
+
+.dash-sub-title {
   font-size: smaller;
 }
 
-#filtering {
-  position: absolute;
-  top: 310px;
-  left: 10px;
-  z-index: 98;
-  font-family: Roboto, sans-serif;
+#filtering-form {
+  display: grid;
+  grid-template-columns: 1fr auto ;
+  font-size: small;
 }
 
-#filtering table {
-  color: white;
-  font-family: Roboto, sans-serif;
+#stat-grid {
+  display: grid;
+  grid-template-columns: 1fr auto ;
+  font-size: small;
+}
+
+.stat-value {
+  font-weight: bolder;
 }
 
 #real-time-topics {
   position: fixed;
   bottom: 10px;
   left: 50%;
-  z-index: 101;
-  margin-left: -450px;
+  margin-left: -450px; /* approx */
 }
 
 .topic-string {

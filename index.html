@@ -10,110 +10,49 @@
 
 <body>
   <div id="map"></div>
-  <div>
+  <div id="dashboard-left">
     <div id="solace-header" class="dashboard">
-      <table>
-        <tr>
-          <td>
-            <img width="250" src="./images/Solace_Logo_Green.png" />
-            <p class="header-title">Real-time Connected Vehicle Demo</p>
-            <p class="header-sub-title">Bidirectional IoT Communication using MQTT<br>Advanced Filtering and Routing
-              Capabilities</p>
-          </td>
-      </table>
+      <img class="dash-line-item" width="250" src="/images/Solace_Logo_Green.png" />
+      <p class="dash-title dash-line-item">Real-time Connected Vehicle Demo</p>
+      <p class="dash-sub-title dash-line-item">Bidirectional IoT Communication using MQTT</p>
+      <p class="dash-sub-title dash-line-item"> Filtering and Routing Capabilities</p>
     </div>
 
     <div id="filtering" class="dashboard">
-      <p class="header-title">Topic Wildcard Filtering:</p>
-      <table>
-        <tr>
-          <td>
-            <table>
-              <tr>
-                <td>Filter by <span class="topic-route">Route</span> number:</td>
-                <td><input type="text" id="route" size="4" /></td>
-              </tr>
-              <tr>
-                <td>Filter by <span class="topic-vehType">Vehicle Type</span>:</td>
-                <td><input type="text" id="vehType" size="4" /></td>
-              </tr>
-              <tr>
-                <td>Filter by <span class="topic-vehID">Vehicle ID</span> number:</td>
-                <td><input type="text" id="vehID" size="4" /></td>
-              </tr>
-              <tr>
-                <td colspan="2">Filter by <span class="topic-status">Status:</span>&nbsp;&nbsp;
-                  <select id="status" class="decorated">
-                    <option value="*">Any</option>
-                    <option value="OK">In Motion</option>
-                    <option value="STOPPED">Stopped</option>
-                    <option value="FAULT">Broken Down</option>
-                  </select>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
+      <p class="dash-title dash-line-item">Topic Wildcard Filtering:</p>
+      <form id="filtering-form">
+        <label for="route">By <span class="topic-route">Route</span> Number</label>
+        <input type="text" id="route" size="6" />
+        <label for="vehType">By <span class="topic-vehType">Vehicle Type</span></label>
+        <input type="text" id="vehType" size="6" />
+        <label for="vehID">By <span class="topic-vehID">Vehicle ID</span> Number</label>
+        <input type="text" id="vehID" size="6" />
+        <label for="status">By <span class="topic-status">Status</span></label>
+        <select id="status">
+          <option value="*">Any</option>
+          <option value="OK">In Motion</option>
+          <option value="STOPPED">Stopped</option>
+          <option value="FAULT">Breakdown</option>
+        </select>
+      </form>
     </div>
 
-    <div id="curt-status" class="dashboard">
-      <table>
-        <tr>
-          <td>
-            Recv'd Message Rate:
-          </td>
-          <td style="font-weight: bold;">
-            <span id='msg_rate'>0</span> msg/s
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Tracked Vehicles:
-          </td>
-          <td>
-            <span id='total_vehicles'>0</span>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            # of Subscriptions:
-          </td>
-          <td>
-            <span id='curt_subs'></span>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            Coverage Accuracy:
-          </td>
-          <td>
-            <span id='curt_accuracy'>N/A</span>
-          </td>
-        </tr>
-      </table>
+    <div id="msg-stat" class="dashboard">
+      <p class="dash-title dash-line-item">Statistics:</p>
+      <div id="stat-grid">
+        <div class="stat-label">Recv'd Message Rate</div>
+        <div class="stat-value"><span id='msg_rate'>0</span> msg/s</div>
+        <div class="stat-label">Tracked Vehicles</div>
+        <div class="stat-value"><span id='total_vehicles'>0</span></div>
+        <div class="stat-label"># of Subscriptions</div>
+        <div class="stat-value"><span id='curt_subs'>0</span></div>
+      </div>
     </div>
   </div>
-
   <div id="real-time-topics" class="dashboard">
-    <table>
-      <tr>
-        <td>
-          <div id="topic-pattern" class="topic-string">
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div id="topic" class="topic-string">&nbsp;</div>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <div id="sub-topic" class="topic-string">&nbsp;</div>
-        </td>
-      </tr>
-    </table>
+    <div id="topic-pattern" class="topic-string"></div>
+    <div id="topic" class="topic-string">&nbsp;</div>
+    <div id="sub-topic" class="topic-string">&nbsp;</div>
   </div>
 
 
