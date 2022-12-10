@@ -1,4 +1,4 @@
-import appConfig from "./config.mjs"
+import appConfig from "./config.js"
 
 // Initialize factory with the most recent API defaults
 var factoryProps = new solace.SolclientFactoryProperties();

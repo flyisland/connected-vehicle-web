@@ -1,4 +1,4 @@
-import appConfig from "./config.mjs"
+import appConfig from "./config.js"
 import { vehicleController } from "./controller.js"
 import { colorTopic, buildSubscriptionTopic } from "./misc.js"
 

@@ -1,5 +1,5 @@
 
-import appConfig from "./config.mjs"
+import appConfig from "./config.js"
 import { colorTopic } from "./misc.js"
 
 export default class Vehicle {
