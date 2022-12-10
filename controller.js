@@ -25,7 +25,7 @@ const vc = {
 
     // add event listener of filtering tags
     vc.htmlFilteringIDs.forEach((eid) => {
-      const inputTag = document.querySelector("#" + eid)
+      const inputTag = document.getElementById(eid)
       inputTag.addEventListener('change', () => { vc.onFilteringChanged() })
     })
   },
@@ -103,7 +103,7 @@ const vc = {
   onFilteringChanged: function () {
     const filter = {}
     vc.htmlFilteringIDs.forEach((eid) => {
-      const inputTag = document.querySelector("#" + eid)
+      const inputTag = document.getElementById(eid)
       if (null == inputTag) {
         filter[eid] = "*"
         return
@@ -135,10 +135,10 @@ const vc = {
       vc.curtSubList.push(topic)
     })
 
-    const curtSubsTag = document.querySelector("#curt_subs")
+    const curtSubsTag = document.getElementById("curt_subs")
     curtSubsTag.innerText = vc.curtSubList.length
 
-    const subTopicTag = document.querySelector("#sub-topic")
+    const subTopicTag = document.getElementById("sub-topic")
     subTopicTag.innerHTML = colorTopic(vc.curtSubList[0])
   },
 
