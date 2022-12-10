@@ -3,8 +3,7 @@ const config = {
   logLevel: "debug",
 
   mapOptions: {
-    //    center: { lat: -30.777444938024253, lng: 121.50542285547441 }, // Super Pit
-    center: { lat: -23.3627438, lng: 119.6652746 }, // Newman Mine Site
+    center: { lat: -23.3644177610712, lng: 119.67464837435948 }, // Newman Mine Site
     zoom: 16,
     mapId: "DEMO_MAP_ID",
     mapTypeId: 'hybrid',
