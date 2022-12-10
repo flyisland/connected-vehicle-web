@@ -22,6 +22,12 @@
 
     <div id="filtering" class="dashboard">
       <p class="dash-title dash-line-item">Topic Wildcard Filtering:</p>
+      <div id="geo-grid">
+        <button id="btn-circle" class="dash-input">Add <span class="topic-lat">Circle</span></button>
+        <button id="btn-polygon" class="dash-input">Add <span class="topic-lat">Polygon</span></button>
+        <button id="btn-rect" class="dash-input">Add <span class="topic-lat">Rect</span></button>
+        <button id="btn-remove" class="dash-input">Remove <span class="topic-lat">Shapes</span></button>
+      </div>
       <form id="filtering-form">
         <label for="route">By <span class="topic-route">Route</span> Number</label>
         <input class="dash-input topic-route" type="text" id="route" size="6" />
