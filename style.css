@@ -59,8 +59,10 @@ body {
 
 #filtering-form {
   display: grid;
-  grid-template-columns: 1fr auto ;
+  grid-template-columns: 2fr 1fr;
   row-gap: 3px;
+  column-gap: 20px;
+  margin: 10px;
   font-size: small;
 }
 
@@ -85,8 +87,10 @@ body {
 
 #stat-grid {
   display: grid;
-  grid-template-columns: 1fr auto ;
+  grid-template-columns: 2fr 1fr ;
   row-gap: 3px;
+  column-gap: 20px;
+  margin: 10px;
   font-size: small;
 }
 
