@@ -18,11 +18,15 @@ export default class Vehicle {
     const infoWindow = new google.maps.InfoWindow({
       content: ""
     })
+    let isInfoWindowOpened = false;
     marker.addListener("click", () => {
-      infoWindow.open({
-        anchor: marker,
-        map,
-      });
+      if (!isInfoWindowOpened) {
+        infoWindow.open({ anchor: marker, map, });
+        isInfoWindowOpened = true
+      } else {
+        infoWindow.close()
+        isInfoWindowOpened = false
+      }
     });
     this.marker = marker
     this.infoWindow = infoWindow
