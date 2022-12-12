@@ -6,10 +6,10 @@ export default class Vehicle {
   constructor(vehMsg, map) {
     Object.assign(this, vehMsg)
     this.map = map
-    this.config = appConfig.vehicles[vehMsg.payload.vehType]
+    this.typeConfig = appConfig.vehicleTypes[vehMsg.payload.vehType]
 
     const imgTag = document.createElement("img");
-    imgTag.src = appConfig.iconBase + this.config.icon
+    imgTag.src = appConfig.iconBase + this.typeConfig.icon
     imgTag.style.filter = "drop-shadow(0 0 3mm black)"
     const marker = new google.maps.marker.AdvancedMarkerView({
       map: this.map,
@@ -44,7 +44,7 @@ export default class Vehicle {
   // calculate the icon's size in pixel according to the zoom level of google
   // map and the body length
   onZoomChanged(zoomLevel) {
-    let bodyLength = this.config.bodyLength
+    let bodyLength = this.typeConfig.bodyLength
     // when (zoomLevel < 18), double the vehicle length
     if (zoomLevel < 18) { bodyLength = bodyLength * 2 }
     // when (zoomLevel < 15), the icon's size is too small, so we keep the
@@ -57,10 +57,10 @@ export default class Vehicle {
   // fake out inactive vehicle
   checkActivity(nowTs) {
     const elapse = nowTs - this.lastTs
-    if (elapse >= this.config.reportInterval * 1000 * 2.5) {
+    if (elapse >= this.typeConfig.reportInterval * 1000 * 2.5) {
       this.marker.map = null
-    } else if (elapse >= this.config.reportInterval * 1000 * 2) {
-    } else if (elapse >= this.config.reportInterval * 1000 * 1.5) {
+    } else if (elapse >= this.typeConfig.reportInterval * 1000 * 2) {
+    } else if (elapse >= this.typeConfig.reportInterval * 1000 * 1.5) {
       this.marker.content.style.opacity = 0.7
     }
   }
@@ -74,7 +74,7 @@ export default class Vehicle {
     <div>
       <pre>${JSON.stringify(this.payload, null, 2)}</pre>
     </div>
-    <div><img class="info-img" src="${appConfig.iconBase + this.config.infoImage}"></div>
+    <div><img class="info-img" src="${appConfig.iconBase + this.typeConfig.infoImage}"></div>
   </div>
 </div>`
   }

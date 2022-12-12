@@ -28,16 +28,14 @@ const config = {
   },
 
   iconBase: "./images/",
-  vehicles: {
+  vehicleTypes: {
     "HAUL": {
-      type: "HAUL",
       reportInterval: 3, // seconds
       icon: "haul.svg",
       bodyLength: 15, // meters
       infoImage: "haul-truck-info.jpeg"
     },
     "WATER": {
-      type: "WATER",
       reportInterval: 3, // seconds
       icon: "water.svg",
       bodyLength: 15, // meters
