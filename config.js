@@ -17,10 +17,10 @@ const config = {
     SessionProperties: {
       // check (https://docs.solace.com/API-Developer-Online-Ref-Documentation/js/solace.SessionProperties.html)
       // to details of all properties
-      "url": "ws://localhost:8008",
-      "vpnName": "default",
-      "userName": "default",
-      "password": "default",
+      url: "ws://localhost:8008",
+      vpnName: "default",
+      userName: "default",
+      password: "default",
     },
     // FATAL: 0, ERROR: 1, WARN: 2, INFO: 3, DEBUG: 4, TRACE: 5
     // NOTICE: works only with "solclientjs-debug.js"
@@ -29,13 +29,13 @@ const config = {
 
   iconBase: "./images/",
   vehicleTypes: {
-    "HAUL": {
+    HAUL: { // type name
       reportInterval: 3, // seconds
       icon: "haul.svg",
       bodyLength: 15, // meters
       infoImage: "haul-truck-info.jpeg"
     },
-    "WATER": {
+    WATER: {
       reportInterval: 3, // seconds
       icon: "water.svg",
       bodyLength: 15, // meters
