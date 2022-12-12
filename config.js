@@ -16,7 +16,7 @@ const config = {
   solace: {
     SessionProperties: {
       // check (https://docs.solace.com/API-Developer-Online-Ref-Documentation/js/solace.SessionProperties.html)
-      // to details of all properties
+      // for details of all properties
       url: "ws://localhost:8008",
       vpnName: "default",
       userName: "default",
@@ -27,7 +27,7 @@ const config = {
     LogLevel: 1,
   },
 
-  iconBase: "./images/",
+  iconBase: "./icons/",
   vehicleTypes: {
     HAUL: { // type name
       reportInterval: 3, // seconds
