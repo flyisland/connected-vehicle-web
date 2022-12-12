@@ -8,7 +8,7 @@ This is basically a copy and refactoring of [Aaron](https://github.com/aaron-613
 
 Together with the [data-generator](../connected-vehicle-data-generator/) project, you'd be able to customize the route's path, the speed of the vehicles, and the icon and picture of each vehicle type. It will you more easily to build a real-time connected **Things** demo on the google map for a particular situation, for example a connected Bike demo of the San Francisco city, or even a connected Boat demo of the Hong Kong city.
 
-## Customization Guide
+## Configuration Guide
 
 You could setup icon and picture for each vehicle type in this project, please check the [data-generator](../connected-vehicle-data-generator/) project for customization of routes.
 
