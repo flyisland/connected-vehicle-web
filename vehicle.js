@@ -58,7 +58,7 @@ export default class Vehicle {
     this.marker.content.height = Math.round(bodyLength / metersPerPx)
   }
 
-  // fake out inactive vehicle
+  // fade out inactive vehicle
   checkActivity(nowTs) {
     const elapse = nowTs - this.lastTs
     if (elapse >= this.typeConfig.reportInterval * 1000 * 2.5) {
