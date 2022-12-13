@@ -9,66 +9,78 @@ const shapeOptions = {
   visible: true,
 }
 
-function covertToLatLng(position) {
-  return new google.maps.LatLng({ lat: position[1], lng: position[0] })
-}
-
 
 const shapes = []
 var isDragging = false
 var map;
-const SHAPE_CIRCLE = "Circle"
-const SHAPE_RECTANGLE = "Rectangle"
+let drawingManager;
 
 const geo = {
   init: function (_map) {
     map = _map
-    document.getElementById("btn-circle").addEventListener('click', geo.addCircle)
-    document.getElementById("btn-rect").addEventListener('click', geo.addRect)
-    document.getElementById("btn-polygon").addEventListener('click', geo.addPolygon)
+    geo.setupDrawingManager()
+
+    document.getElementById("btn-circle").addEventListener('click',
+      () => { geo.addShape(google.maps.drawing.OverlayType.CIRCLE) })
+    document.getElementById("btn-rect").addEventListener('click',
+      () => { geo.addShape(google.maps.drawing.OverlayType.RECTANGLE) })
+    document.getElementById("btn-polygon").addEventListener('click',
+      () => { geo.addShape(google.maps.drawing.OverlayType.POLYGON) })
     document.getElementById("btn-remove").addEventListener('click', geo.removeAllShapes)
   },
 
-  addCircle: function () {
-    const circle = new google.maps.Circle(Object.assign({
-      map: map,
-      center: map.getCenter(),
-      radius: 500 + (Math.random() * 100),
-    }, shapeOptions));
-    shapes.push(circle)
-    circle.shapeType = SHAPE_CIRCLE
-    geo.onShapeChanged()
-    circle.addListener('radius_changed', geo.onShapeChanged);
-    circle.addListener('center_changed', geo.onShapeChanged);
-    circle.addListener('dragstart', () => { isDragging = true });
-    circle.addListener('dragend', () => { isDragging = false; geo.onShapeChanged() });
+  closeDrawingManager() {
+    drawingManager.setDrawingMode(null)
+    drawingManager.setMap(null)
   },
 
-  addRect: function () {
-    const p1 = covertToLatLng([119.6746484, -23.3644178])
-    const p2 = covertToLatLng([119.6657252, -23.3576024])
+  setupDrawingManager() {
+    drawingManager = new google.maps.drawing.DrawingManager({
+      circleOptions: shapeOptions,
+      rectangleOptions: shapeOptions,
+      polygonOptions: shapeOptions,
+      drawingMode: null,
+      drawingControl: false,
+      drawingControlOptions: { position: google.maps.ControlPosition.TOP_CENTER, }
+    })
 
-    const rect = new google.maps.Rectangle(Object.assign({
-      map: map,
-      bounds: {
-        north: Math.max(p1.lat(), p2.lat()),
-        south: Math.min(p1.lat(), p2.lat()),
-        east: Math.max(p1.lng(), p2.lng()),
-        west: Math.min(p1.lng(), p2.lng()),
-      },
-    }, shapeOptions))
-    shapes.push(rect)
-    rect.shapeType = SHAPE_RECTANGLE
-    geo.onShapeChanged()
-    rect.addListener('bounds_changed', geo.onShapeChanged);
-    rect.addListener('dragstart', () => { isDragging = true });
-    rect.addListener('dragend', () => { isDragging = false; geo.onShapeChanged() });
+
+    drawingManager.addListener('circlecomplete', function (circle) {
+      geo.onNewShape(circle, google.maps.drawing.OverlayType.CIRCLE)
+      circle.addListener('radius_changed', geo.onShapeChanged);
+      circle.addListener('center_changed', geo.onShapeChanged);
+    })
+    drawingManager.addListener('rectanglecomplete', function (rect) {
+      geo.onNewShape(rect, google.maps.drawing.OverlayType.RECTANGLE)
+      rect.addListener('bounds_changed', geo.onShapeChanged);
+    })
+    drawingManager.addListener('polygoncomplete', function (polygon) {
+      geo.onNewShape(polygon, google.maps.drawing.OverlayType.POLYGON)
+      google.maps.event.addListener(polygon.getPath(), 'set_at', geo.onShapeChanged);
+      google.maps.event.addListener(polygon.getPath(), 'insert_at', geo.onShapeChanged);
+      google.maps.event.addListener(polygon.getPath(), 'remove_at', geo.onShapeChanged);
+    })
   },
 
-  addPolygon: function () {
-    const p1 = covertToLatLng([119.6746484, -23.3644178])
-    const p2 = covertToLatLng([119.6657252, -23.3576024])
+  addShape: function (drawingMode) {
+    drawingManager.setOptions({
+      map,
+      drawingMode: drawingMode,
+      drawingControl: true,
+      drawingControlOptions: {
+        position: google.maps.ControlPosition.TOP_CENTER,
+        drawingModes: [drawingMode]
+      }
+    })
+  },
 
+  onNewShape(shape, drawingMode) {
+    geo.closeDrawingManager()
+    shapes.push(shape)
+    shape.shapeType = drawingMode
+    geo.onShapeChanged()
+    shape.addListener('dragstart', () => { isDragging = true });
+    shape.addListener('dragend', () => { isDragging = false; geo.onShapeChanged() })
   },
 
   onShapeChanged() {
@@ -76,11 +88,14 @@ const geo = {
     log.debug("--- onShapeChanged ---")
     shapes.forEach((shape) => {
       switch (shape.shapeType) {
-        case SHAPE_CIRCLE:
-          log.debug(`${SHAPE_CIRCLE}: center:${shape.getCenter()}, radius:${shape.getRadius()}, bounds:${shape.getBounds()}`)
+        case google.maps.drawing.OverlayType.CIRCLE:
+          log.debug(`${shape.shapeType}: center:${shape.getCenter()}, radius:${shape.getRadius()}, bounds:${shape.getBounds()}`)
           break
-        case SHAPE_RECTANGLE:
-          log.debug(`${SHAPE_RECTANGLE}: bounds:${shape.getBounds()}`)
+        case google.maps.drawing.OverlayType.RECTANGLE:
+          log.debug(`${shape.shapeType}: bounds:${shape.getBounds()}`)
+          break
+        case google.maps.drawing.OverlayType.POLYGON:
+          log.debug(`${shape.shapeType}: path:${shape.getPath()}`)
           break
         default:
           log.debug(shape.shapeType)

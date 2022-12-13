@@ -18,7 +18,7 @@ for (const subTitle of appConfig.subTitles) {
 
 // set google map script src
 const scriptTag = document.createElement("script")
-scriptTag.src = `https://maps.googleapis.com/maps/api/js?key=${appConfig.googleApiKey}&callback=initMap&libraries=marker,places&v=beta`
+scriptTag.src = `https://maps.googleapis.com/maps/api/js?key=${appConfig.googleApiKey}&callback=initMap&libraries=drawing,marker,places&v=beta`
 scriptTag.defer = true
 document.getElementsByTagName("body")[0].append(scriptTag)
 
