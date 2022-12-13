@@ -22,11 +22,11 @@ const geo = {
     geo.setupDrawingManager()
 
     document.getElementById("btn-circle").addEventListener('click',
-      () => { geo.addShape(google.maps.drawing.OverlayType.CIRCLE) })
+      () => { geo.startDrawing(google.maps.drawing.OverlayType.CIRCLE) })
     document.getElementById("btn-rect").addEventListener('click',
-      () => { geo.addShape(google.maps.drawing.OverlayType.RECTANGLE) })
+      () => { geo.startDrawing(google.maps.drawing.OverlayType.RECTANGLE) })
     document.getElementById("btn-polygon").addEventListener('click',
-      () => { geo.addShape(google.maps.drawing.OverlayType.POLYGON) })
+      () => { geo.startDrawing(google.maps.drawing.OverlayType.POLYGON) })
     document.getElementById("btn-remove").addEventListener('click', geo.removeAllShapes)
   },
 
@@ -70,7 +70,7 @@ const geo = {
     })
   },
 
-  addShape: function (drawingMode) {
+  startDrawing: function (drawingMode) {
     cancelDrawing = false
     drawingManager.setOptions({
       map,
