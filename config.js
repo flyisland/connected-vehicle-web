@@ -2,6 +2,13 @@ const config = {
   //"trace","debug","info","warn","error"
   logLevel: "debug",
 
+  title: "Real-time Connected Mining Demo",
+  subTitles: [
+    "Bidirectional IoT Communication using MQTT",
+    "Advanced Filtering and Routing Capabilities"
+  ],
+
+  googleApiKey: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
   mapOptions: {
     center: { lat: -23.3644177610712, lng: 119.67464837435948 }, // Newman Mine Site
     zoom: 16,

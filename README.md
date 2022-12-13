@@ -19,6 +19,13 @@ const config = {
   //"trace","debug","info","warn","error"
   logLevel: "debug",
 
+  title: "Real-time Connected Mining Demo",
+  subTitles: [
+    "Bidirectional IoT Communication using MQTT",
+    "Advanced Filtering and Routing Capabilities"
+  ],
+
+  googleApiKey: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX", // set you own google api key here
   mapOptions: {
     center: { lat: -23.3644177610712, lng: 119.67464837435948 }, // Newman Mine Site
     zoom: 16,
@@ -64,6 +71,7 @@ const config = {
 
 You could config:
 
+- [Create you own](https://developers.google.com/maps/documentation/javascript/get-api-key#create-api-keys) `googleApiKey` first
 - The `center` of the `mapOptions` is the particular location you want to show
 - Modify the `SessionProperties` to point to the same Solace broker with the [data-generator](../../../connected-vehicle-data-generator/) project
 - Each key of the `vehicleTypes` object is a **vehicle type**, you could specify the icon and picture(used in the popup Info Window) here.
