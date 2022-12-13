@@ -11,9 +11,10 @@ const shapeOptions = {
 
 
 const shapes = []
-var isDragging = false
-var map;
+let isDragging = false
+let map;
 let drawingManager;
+let cancelDrawing = false
 
 const geo = {
   init: function (_map) {
@@ -60,9 +61,17 @@ const geo = {
       google.maps.event.addListener(polygon.getPath(), 'insert_at', geo.onShapeChanged);
       google.maps.event.addListener(polygon.getPath(), 'remove_at', geo.onShapeChanged);
     })
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === "Escape") {
+        cancelDrawing = true
+        geo.closeDrawingManager()
+      }
+    })
   },
 
   addShape: function (drawingMode) {
+    cancelDrawing = false
     drawingManager.setOptions({
       map,
       drawingMode: drawingMode,
@@ -75,6 +84,10 @@ const geo = {
   },
 
   onNewShape(shape, drawingMode) {
+    if (cancelDrawing) {
+      shape.setMap(null)
+      return
+    }
     geo.closeDrawingManager()
     shapes.push(shape)
     shape.shapeType = drawingMode
@@ -89,13 +102,13 @@ const geo = {
     shapes.forEach((shape) => {
       switch (shape.shapeType) {
         case google.maps.drawing.OverlayType.CIRCLE:
-          log.debug(`${shape.shapeType}: center:${shape.getCenter()}, radius:${shape.getRadius()}, bounds:${shape.getBounds()}`)
+          log.debug(`${shape.shapeType}: radius:${shape.getRadius()}, ${shape.getBounds().getNorthEast().lat() - shape.getCenter().lat()}, ${shape.getBounds().getNorthEast().lng() - shape.getCenter().lng()}`)
           break
         case google.maps.drawing.OverlayType.RECTANGLE:
           log.debug(`${shape.shapeType}: bounds:${shape.getBounds()}`)
           break
         case google.maps.drawing.OverlayType.POLYGON:
-          log.debug(`${shape.shapeType}: path:${shape.getPath()}`)
+          log.debug(`${shape.shapeType}: path:${shape.getPath().getArray()}`)
           break
         default:
           log.debug(shape.shapeType)
