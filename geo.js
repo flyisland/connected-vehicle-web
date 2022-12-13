@@ -26,6 +26,7 @@ const geo = {
     document.getElementById("btn-circle").addEventListener('click', geo.addCircle)
     document.getElementById("btn-rect").addEventListener('click', geo.addRect)
     document.getElementById("btn-polygon").addEventListener('click', geo.addPolygon)
+    document.getElementById("btn-remove").addEventListener('click', geo.removeAllShapes)
   },
 
   addCircle: function () {
@@ -35,7 +36,7 @@ const geo = {
       radius: 500 + (Math.random() * 100),
     }, shapeOptions));
     shapes.push(circle)
-    circle.shapeType = CIRCLE_TYPE
+    circle.shapeType = SHAPE_CIRCLE
     geo.onShapeChanged()
     circle.addListener('radius_changed', geo.onShapeChanged);
     circle.addListener('center_changed', geo.onShapeChanged);
@@ -70,10 +71,28 @@ const geo = {
 
   },
 
-  onShapeChanged(shape) {
+  onShapeChanged() {
     if (isDragging) { return }
-    //
+    log.debug("--- onShapeChanged ---")
+    shapes.forEach((shape) => {
+      switch (shape.shapeType) {
+        case SHAPE_CIRCLE:
+          log.debug(`${SHAPE_CIRCLE}: center:${shape.getCenter()}, radius:${shape.getRadius()}, bounds:${shape.getBounds()}`)
+          break
+        case SHAPE_RECTANGLE:
+          log.debug(`${SHAPE_RECTANGLE}: bounds:${shape.getBounds()}`)
+          break
+        default:
+          log.debug(shape.shapeType)
+      }
+    })
   },
+
+  removeAllShapes() {
+    for (let shape = shapes.pop(); 'undefined' != typeof shape; shape = shapes.pop()) {
+      shape.setMap(null)
+    }
+  }
 }
 
 export { geo as default }
