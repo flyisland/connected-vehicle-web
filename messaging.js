@@ -94,6 +94,16 @@ var msgController = {
     }
   },
 
+  sendRequest(topic, payload, onFilteringMessage) {
+    let message = solace.SolclientFactory.createMessage();
+    message.setDestination(solace.SolclientFactory.createTopicDestination(topic));
+    message.setBinaryAttachment(payload);
+    message.setDeliveryMode(solace.MessageDeliveryModeType.DIRECT);
+    session.sendRequest(message, 10 * 1000, (session, replyMsg, userObject) => {
+      const replyPayload = this.getTextPayload(replyMsg)
+      onFilteringMessage(replyPayload)
+    }, (session, error, userObject) => { log.error(`sendRequest error: ${error}`) })
+  }
 }
 
 export { msgController as default }
