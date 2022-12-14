@@ -28,6 +28,7 @@ const config = {
       vpnName: "default",
       userName: "default",
       password: "default",
+      clientName: "connected-web",
     },
     // FATAL: 0, ERROR: 1, WARN: 2, INFO: 3, DEBUG: 4, TRACE: 5
     // NOTICE: works only with "solclientjs-debug.js"
