@@ -98,22 +98,34 @@ const geo = {
 
   onShapeChanged() {
     if (isDragging) { return }
-    log.debug("--- onShapeChanged ---")
+    let result = []
     shapes.forEach((shape) => {
+      let shapeObj
       switch (shape.shapeType) {
         case google.maps.drawing.OverlayType.CIRCLE:
-          log.debug(`${shape.shapeType}: radius:${shape.getRadius()}, ${shape.getBounds().getNorthEast().lat() - shape.getCenter().lat()}, ${shape.getBounds().getNorthEast().lng() - shape.getCenter().lng()}`)
+          shapeObj = {
+            type: "Ellipse", // circle on google map is actually an ellipse
+            bounds: shape.getBounds(),
+          }
           break
         case google.maps.drawing.OverlayType.RECTANGLE:
-          log.debug(`${shape.shapeType}: bounds:${shape.getBounds()}`)
+          shapeObj = {
+            type: "Rectangle",
+            bounds: shape.getBounds(),
+          }
           break
         case google.maps.drawing.OverlayType.POLYGON:
-          log.debug(`${shape.shapeType}: path:${shape.getPath().getArray()}`)
+          shapeObj = {
+            type: "Polygon",
+            coordinates: shape.getPath().getArray(),
+          }
           break
         default:
-          log.debug(shape.shapeType)
+          return
       }
+      result.push(shapeObj)
     })
+    log.debug(JSON.stringify(result, null, 2))
   },
 
   removeAllShapes() {
