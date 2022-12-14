@@ -15,10 +15,12 @@ let isDragging = false
 let map;
 let drawingManager;
 let cancelDrawing = false
+let requestGeoFiltering
 
 const geo = {
-  init: function (_map) {
+  init: function (_map, _requestGeoFiltering) {
     map = _map
+    requestGeoFiltering = _requestGeoFiltering
     geo.setupDrawingManager()
 
     document.getElementById("btn-circle").addEventListener('click',
@@ -125,7 +127,7 @@ const geo = {
       }
       result.push(shapeObj)
     })
-    log.debug(JSON.stringify(result, null, 2))
+    requestGeoFiltering(result)
   },
 
   removeAllShapes() {

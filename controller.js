@@ -15,7 +15,7 @@ const vc = {
 
     vc.init()
     vc.start()
-    geo.init(vc.map)
+    geo.init(vc.map, vc.requestGeoFiltering)
   },
 
   htmlFilteringIDs: ["route", "vehType", "vehID", "status"],
@@ -35,10 +35,7 @@ const vc = {
   },
 
   start: function () {
-    msgController.onMessage = function (message) {
-      vc.onMessage(message)
-    }
-    msgController.connect(vc.onMessagingConnected)
+    msgController.connect(vc.onMessagingConnected, vc.onMessage)
     setInterval(() => { vc.updateRealTimeTopics() }, 1000)
     setInterval(() => { vc.checkInactiveVehicles() }, 500)
   },
@@ -143,6 +140,10 @@ const vc = {
   onMessagingConnected: function () {
     vc.subscribeTo(buildSubscriptionTopic({}))
   },
+
+  requestGeoFiltering(shapes) {
+    log.debug(JSON.stringify(shapes))
+  }
 }
 
 export { vc as vehicleController }
