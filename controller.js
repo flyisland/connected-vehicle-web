@@ -23,6 +23,8 @@ const vc = {
     vc.topicTag = document.getElementById("topic")
     vc.msgRateTag = document.getElementById("msg_rate")
     vc.totalVehiclesTag = document.getElementById("total_vehicles")
+    vc.curtSubsTag = document.getElementById("curt_subs")
+    vc.subTopicTag = document.getElementById("sub-topic")
     vc.zoomLevel = appConfig.mapOptions.zoom
 
     // add event listener of filtering tags
@@ -121,27 +123,21 @@ const vc = {
     vc.subscribeTo(subTopic)
   },
 
-  curtSubList: [],
+  curtSubTopic: null,
   // topicList: a list to string, or string if only one topic to subscribe to
-  subscribeTo: function (topicList) {
-    if (typeof topicList == 'string') {
-      topicList = [topicList]
+  subscribeTo: function (topic) {
+    // un-subscribe first
+    if (vc.curtSubTopic !== null) {
+      msgController.unSubscribe(vc.curtSubTopic)
+      vc.curtSubTopic = null
     }
 
-    // un-subscribe
-    vc.curtSubList.forEach((topic) => { msgController.unSubscribe(topic) })
-
-    vc.curtSubList = []
-    topicList.forEach((topic) => {
+    if (topic !== null) {
       msgController.subscribeTo(topic)
-      vc.curtSubList.push(topic)
-    })
-
-    const curtSubsTag = document.getElementById("curt_subs")
-    curtSubsTag.innerText = vc.curtSubList.length
-
-    const subTopicTag = document.getElementById("sub-topic")
-    subTopicTag.innerHTML = colorTopic(vc.curtSubList[0])
+      vc.curtSubTopic = topic
+      vc.curtSubsTag.innerText = "1"
+      vc.subTopicTag.innerHTML = colorTopic(vc.curtSubTopic)
+    }
   },
 
   onMessagingConnected: function () {
