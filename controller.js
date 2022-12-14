@@ -4,6 +4,8 @@ import Vehicle from "./vehicle.js"
 import geo from "./geo.js"
 import { colorTopic, buildSubscriptionTopic } from "./misc.js"
 
+const GEO_FILTERING_REQUEST_TOPIC = "geo/filtering"
+
 // vehicleController
 const vc = {
   map: null,
@@ -142,6 +144,8 @@ const vc = {
   },
 
   requestGeoFiltering(shapes) {
+    msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC, JSON.stringify(shapes),
+      (payload) => { log.debug(JSON.stringify(payload)) })
     log.debug(JSON.stringify(shapes))
   }
 }
