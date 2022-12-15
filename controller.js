@@ -12,6 +12,7 @@ let totalVehiclesTag;
 let curtSubsTag;
 let subTopicTag;
 let zoomLevel;
+
 // vehicleController
 const vc = {
   map: null,
@@ -23,7 +24,7 @@ const vc = {
 
     vc.init()
     vc.start()
-    geo.init(vc.map, vc.requestGeoFiltering)
+    geo.init(vc.map, vc.onShapesChanged)
   },
 
   htmlFilteringIDs: ["route", "vehType", "vehID", "status"],
@@ -39,6 +40,12 @@ const vc = {
     vc.htmlFilteringIDs.forEach((eid) => {
       const inputTag = document.getElementById(eid)
       inputTag.addEventListener('change', () => { vc.onFilteringChanged() })
+    })
+
+    vc.getFilteringParameters()
+    document.getElementById("sub-form").addEventListener('change', () => {
+      vc.getFilteringParameters()
+      vc.requestGeoFiltering()
     })
   },
 
@@ -150,11 +157,30 @@ const vc = {
     vc.subscribeTo(buildSubscriptionTopic({}))
   },
 
-  requestGeoFiltering(shapes) {
-    msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC, JSON.stringify(shapes),
+  shapes: null,
+  onShapesChanged(_shapes) {
+    vc.shapes = _shapes
+    vc.requestGeoFiltering()
+  },
+
+  subMaxRange: null,
+  subAccuracy: null,
+  getFilteringParameters() {
+    vc.subMaxRange = parseInt(document.getElementById("sub_max_range").value.trim())
+    vc.subAccuracy = parseInt(document.getElementById("sub_accuracy").value.trim())
+  },
+
+  requestGeoFiltering() {
+    if ((vc.shapes === null) || (vc.shapes.length === 0)) { return }
+    let request = {
+      maxRange: vc.subMaxRange,
+      accuracy: vc.subAccuracy,
+      shapes: vc.shapes,
+    }
+    msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC, JSON.stringify(request),
       (payload) => { log.debug(JSON.stringify(payload)) })
-    log.debug(JSON.stringify(shapes))
-  }
+    log.debug(JSON.stringify(request))
+  },
 }
 
 export { vc as vehicleController }
