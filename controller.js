@@ -6,6 +6,12 @@ import { colorTopic, buildSubscriptionTopic } from "./misc.js"
 
 const GEO_FILTERING_REQUEST_TOPIC = "geo/filtering"
 
+let topicTag;
+let msgRateTag;
+let totalVehiclesTag;
+let curtSubsTag;
+let subTopicTag;
+let zoomLevel;
 // vehicleController
 const vc = {
   map: null,
@@ -22,12 +28,12 @@ const vc = {
 
   htmlFilteringIDs: ["route", "vehType", "vehID", "status"],
   init: function () {
-    vc.topicTag = document.getElementById("topic")
-    vc.msgRateTag = document.getElementById("msg_rate")
-    vc.totalVehiclesTag = document.getElementById("total_vehicles")
-    vc.curtSubsTag = document.getElementById("curt_subs")
-    vc.subTopicTag = document.getElementById("sub-topic")
-    vc.zoomLevel = appConfig.mapOptions.zoom
+    topicTag = document.getElementById("topic")
+    msgRateTag = document.getElementById("msg_rate")
+    totalVehiclesTag = document.getElementById("total_vehicles")
+    curtSubsTag = document.getElementById("curt_subs")
+    subTopicTag = document.getElementById("sub-topic")
+    zoomLevel = appConfig.mapOptions.zoom
 
     // add event listener of filtering tags
     vc.htmlFilteringIDs.forEach((eid) => {
@@ -52,7 +58,7 @@ const vc = {
     let veh = null
     if (!(vehMsg.payload.vehID in vc.vehicles)) {
       veh = new Vehicle(vehMsg, vc.map)
-      veh.onZoomChanged(vc.zoomLevel)
+      veh.onZoomChanged(zoomLevel)
       vc.vehicles[vehMsg.payload.vehID] = veh
     } else {
       veh = vc.vehicles[vehMsg.payload.vehID]
@@ -61,16 +67,16 @@ const vc = {
   },
 
   updateTopic: function (topic) {
-    vc.topicTag.innerHTML = colorTopic(topic)
+    topicTag.innerHTML = colorTopic(topic)
   },
 
 
-  onZoomChanged: function (zoomLevel) {
-    vc.zoomLevel = zoomLevel;
-    log.debug(`zoom=${vc.zoomLevel}`)
+  onZoomChanged: function (_zoomLevel) {
+    zoomLevel = _zoomLevel;
+    log.debug(`zoom=${_zoomLevel}`)
 
     for (const [k, v] of Object.entries(vc.vehicles)) {
-      v.onZoomChanged(vc.zoomLevel)
+      v.onZoomChanged(_zoomLevel)
     }
   },
 
@@ -85,12 +91,12 @@ const vc = {
     let nowTs = Date.now()
     let secs = (nowTs - vc.lastTs) / 1000
     let rate = Math.round((vc.msgAmount - vc.lastMsgAmount) / secs)
-    vc.msgRateTag.innerText = `${rate}`
+    msgRateTag.innerText = `${rate}`
     vc.lastMsgAmount = vc.msgAmount
     vc.lastTs = nowTs
   },
   updateTotalVehicles: function () {
-    vc.totalVehiclesTag.innerText = Object.keys(vc.vehicles).length.toString()
+    totalVehiclesTag.innerText = Object.keys(vc.vehicles).length.toString()
   },
 
   checkInactiveVehicles: function () {
@@ -125,6 +131,7 @@ const vc = {
   curtSubTopic: null,
   // topicList: a list to string, or string if only one topic to subscribe to
   subscribeTo: function (topic) {
+    log.debug(`subscribeTo(${topic})`)
     // un-subscribe first
     if (vc.curtSubTopic !== null) {
       msgController.unSubscribe(vc.curtSubTopic)
@@ -134,8 +141,8 @@ const vc = {
     if (topic !== null) {
       msgController.subscribeTo(topic)
       vc.curtSubTopic = topic
-      vc.curtSubsTag.innerText = "1"
-      vc.subTopicTag.innerHTML = colorTopic(vc.curtSubTopic)
+      curtSubsTag.innerText = "1"
+      subTopicTag.innerHTML = colorTopic(vc.curtSubTopic)
     }
   },
 
