@@ -1,7 +1,8 @@
+const strokeColor = '#F71'
 const shapeOptions = {
-  strokeColor: '#F71',
+  strokeColor: strokeColor,
   strokeOpacity: 0.7,
-  fillColor: '#F71',
+  fillColor: strokeColor,
   fillOpacity: 0.025,
   draggable: true,
   clickable: true,
@@ -9,8 +10,20 @@ const shapeOptions = {
   visible: true,
 }
 
+const rectColor = "#00c895"
+const subRectangleOptions = {
+  strokeColor: rectColor,
+  strokeOpacity: 0.5,
+  strokeWeight: 1,
+  fillColor: rectColor,
+  fillOpacity: 0.05,
+  zIndex: 1000000, //factor,
+  clickable: true,
+}
 
 const shapes = []
+const rangeRectangles = []
+let curtGeoFilterRanges;
 let isDragging = false
 let map;
 let drawingManager;
@@ -134,7 +147,34 @@ const geo = {
     for (let shape = shapes.pop(); 'undefined' != typeof shape; shape = shapes.pop()) {
       shape.setMap(null)
     }
-  }
+  },
+
+  updateRangeRectangles(ranges) {
+    geo.removeAllRangeRectangles()
+    curtGeoFilterRanges = ranges
+    geo.drawAllRangeRectangles()
+  },
+
+  removeAllRangeRectangles() {
+    for (let rect = rangeRectangles.pop(); 'undefined' != typeof rect; rect = rangeRectangles.pop()) {
+      rect.setMap(null)
+    }
+  },
+
+  drawAllRangeRectangles() {
+    for (let range of curtGeoFilterRanges) {
+      const rect = new google.maps.Rectangle(Object.assign({
+        map: map,
+        bounds: {
+          north: range.sign.Y > 0 ? range.coord.Y + range.unit.Y : range.coord.Y * -1,
+          south: range.sign.Y > 0 ? range.coord.Y : (range.coord.Y + range.unit.Y) * -1,
+          east: range.sign.X > 0 ? range.coord.X + range.unit.X : range.coord.X * -1,
+          west: range.sign.X > 0 ? range.coord.X : (range.coord.X + range.unit.X) * -1,
+        },
+      }, subRectangleOptions))
+      rangeRectangles.push(rect)
+    }
+  },
 }
 
 export { geo as default }
