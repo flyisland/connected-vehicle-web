@@ -11,6 +11,7 @@ let msgRateTag;
 let totalVehiclesTag;
 let curtSubsTag;
 let subTopicTag;
+let coverAccuracyTag;
 let zoomLevel;
 
 // vehicleController
@@ -34,6 +35,7 @@ const vc = {
     totalVehiclesTag = document.getElementById("total_vehicles")
     curtSubsTag = document.getElementById("curt_subs")
     subTopicTag = document.getElementById("sub-topic")
+    coverAccuracyTag = document.getElementById("cover_accuracy")
     zoomLevel = appConfig.mapOptions.zoom
 
     // add event listener of filtering tags
@@ -177,9 +179,16 @@ const vc = {
       minAccuracy: vc.subAccuracy,
       shapes: vc.shapes,
     }
-    msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC, JSON.stringify(request),
-      (payload) => { log.debug(JSON.stringify(payload)) })
     log.debug(JSON.stringify(request))
+    msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC,
+      JSON.stringify(request), vc.onGeoFilteringResult)
+  },
+
+  onGeoFilteringResult(payload) {
+    let reply = JSON.parse(payload)
+    curtSubsTag.innerText = reply.ranges.length
+    coverAccuracyTag.innerText = (reply.accuracy * 100).toFixed(2)
+    geo.updateRangeRectangles(reply.ranges)
   },
 }
 
