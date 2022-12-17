@@ -35,11 +35,15 @@
       <form id="sub-form"
         oninput="sub_max_output.value=sub_max_range.value;sub_accuracy_output.value=sub_accuracy.value">
         <label for="sub_max_range">Max Subs:</label>
-        <input id="sub_max_range" type="range" min="10" max="1500" value="100">
-        <output name="sub_max_output" for="sub_max_range">100</output>
+        <input id="sub_max_range" type="range" min="10" max="1500" value="300">
+        <output name="sub_max_output" for="sub_max_range">300</output>
         <label for="sub_accuracy">Accuracy:</label>
-        <input id="sub_accuracy" type="range" min="50" max="100" value="90">
-        <div><output name="sub_accuracy_output" for="sub_accuracy">90</output><span>%</span></div>
+        <input id="sub_accuracy" type="range" min="50" max="100" value="95">
+        <div><output name="sub_accuracy_output" for="sub_accuracy">95</output><span>%</span></div>
+      </form>
+      <form id="range-form">
+        <label for="show_ranges">Show all Subscription Rectangles:</label>
+        <input id="show_ranges" type="checkbox" checked="false">
       </form>
       <form id="filtering-form">
         <label for="route">By <span class="topic-route">Route</span> Number</label>

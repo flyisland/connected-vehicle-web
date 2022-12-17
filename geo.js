@@ -23,12 +23,13 @@ const subRectangleOptions = {
 
 const shapes = []
 const rangeRectangles = []
-let curtGeoFilterRanges;
+let curtGeoFilterRanges = [];
 let isDragging = false
 let map;
 let drawingManager;
 let cancelDrawing = false
 let onShapesChanged
+let showAllRanges = false
 
 const geo = {
   init: function (_map, _requestGeoFiltering) {
@@ -43,6 +44,16 @@ const geo = {
     document.getElementById("btn-polygon").addEventListener('click',
       () => { geo.startDrawing(google.maps.drawing.OverlayType.POLYGON) })
     document.getElementById("btn-remove").addEventListener('click', geo.removeAllShapes)
+    const showRangesCheckbox = document.getElementById("show_ranges")
+    showRangesCheckbox.checked = showAllRanges
+    showRangesCheckbox.addEventListener('change', () => {
+      showAllRanges = showRangesCheckbox.checked
+      if (showAllRanges) {
+        geo.drawAllRangeRectangles()
+      } else {
+        geo.removeAllRangeRectangles()
+      }
+    })
   },
 
   closeDrawingManager() {
@@ -147,6 +158,8 @@ const geo = {
     for (let shape = shapes.pop(); 'undefined' != typeof shape; shape = shapes.pop()) {
       shape.setMap(null)
     }
+    // TODO: onShapesChanged([]) to remove all subscriptions
+    geo.removeAllRangeRectangles()
   },
 
   updateRangeRectangles(ranges) {
@@ -162,6 +175,7 @@ const geo = {
   },
 
   drawAllRangeRectangles() {
+    if (!showAllRanges) { return }
     for (let range of curtGeoFilterRanges) {
       const rect = new google.maps.Rectangle(Object.assign({
         map: map,

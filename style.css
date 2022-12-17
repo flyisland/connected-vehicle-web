@@ -75,6 +75,15 @@ body {
   font-size: small;
 }
 
+#range-form{
+  display: grid;
+  grid-template-columns: auto auto;
+  row-gap: 3px;
+  column-gap: 10px;
+  margin: 10px;
+  font-size: small;
+}
+
 .dash-input {
   color:white;
   border: 2px solid #00c895;
