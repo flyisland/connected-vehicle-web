@@ -173,8 +173,8 @@ const vc = {
   requestGeoFiltering() {
     if ((vc.shapes === null) || (vc.shapes.length === 0)) { return }
     let request = {
-      maxRange: vc.subMaxRange,
-      accuracy: vc.subAccuracy,
+      maxRangeCount: vc.subMaxRange,
+      minAccuracy: vc.subAccuracy,
       shapes: vc.shapes,
     }
     msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC, JSON.stringify(request),
