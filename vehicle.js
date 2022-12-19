@@ -10,7 +10,8 @@ export default class Vehicle {
 
     const imgTag = document.createElement("img");
     imgTag.src = appConfig.iconBase + this.typeConfig.icon
-    imgTag.style.filter = "drop-shadow(0 0 3mm black)"
+    imgTag.className = `marker-${vehMsg.payload.status}`
+    //    imgTag.style.filter = "drop-shadow(0 0 3mm black)"
     const marker = new google.maps.marker.AdvancedMarkerView({
       map: this.map,
       content: imgTag
