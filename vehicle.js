@@ -64,6 +64,7 @@ export default class Vehicle {
     if (elapse >= this.typeConfig.reportInterval * 1000 * 2.5) {
       this.marker.map = null
     } else if (elapse >= this.typeConfig.reportInterval * 1000 * 2) {
+      this.marker.content.style.opacity = 0.4
     } else if (elapse >= this.typeConfig.reportInterval * 1000 * 1.5) {
       this.marker.content.style.opacity = 0.7
     }
@@ -71,8 +72,7 @@ export default class Vehicle {
 
   buildInfoContent() {
     return `<div class="info-box">
-  <div class="info-title">Vehicle: ${this.payload.vehID}</div>
-
+  <div class="info-title">Vehicle: ${this.payload.vehID}, Status: <span class="info-status-${this.payload.status}">&nbsp;${this.payload.status}&nbsp;</span></div>
   <div class="info-topic">${colorTopic(this.topic)}</div>
   <div class="info-body">
     <div>

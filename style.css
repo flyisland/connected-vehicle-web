@@ -149,3 +149,13 @@ body {
   object-fit: cover;
   height: 15em;
 }
+
+.info-status-OK{
+  color:white;
+  background-color: green;
+}
+
+.info-status-FAULT{
+  color:white;
+  background-color: red;
+}
