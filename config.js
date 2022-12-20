@@ -20,6 +20,7 @@ const config = {
     drawable: true,
   },
 
+  singleLevelWildCard: "*",
   solace: {
     SessionProperties: {
       // check (https://docs.solace.com/API-Developer-Online-Ref-Documentation/js/solace.SessionProperties.html)

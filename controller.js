@@ -36,6 +36,7 @@ const vc = {
     curtSubsTag = document.getElementById("curt_subs")
     subTopicTag = document.getElementById("sub-topic")
     coverAccuracyTag = document.getElementById("cover_accuracy")
+    document.getElementById("topic-status-Any").value = appConfig.singleLevelWildCard
     zoomLevel = appConfig.mapOptions.zoom
 
     // add event listener of filtering tags
@@ -123,12 +124,12 @@ const vc = {
     vc.htmlFilteringIDs.forEach((eid) => {
       const inputTag = document.getElementById(eid)
       if (null == inputTag) {
-        filter[eid] = "*"
+        filter[eid] = appConfig.singleLevelWildCard
         return
       }
       const value = inputTag.value.trim()
       if (value.length == 0) {
-        filter[eid] = "*"
+        filter[eid] = appConfig.singleLevelWildCard
       } else {
         filter[eid] = value
       }
@@ -177,6 +178,7 @@ const vc = {
     let request = {
       maxRangeCount: vc.subMaxRange,
       minAccuracy: vc.subAccuracy,
+      singleLevelWildCard: appConfig.singleLevelWildCard,
       shapes: vc.shapes,
     }
     log.debug(JSON.stringify(request))

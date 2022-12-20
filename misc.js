@@ -1,3 +1,4 @@
+import appConfig from "./config.js"
 const topicSeparator = "/"
 // acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lng}/{dir}/{status}
 const topicLevels = {
@@ -32,7 +33,7 @@ function buildSubscriptionTopic(filter) {
     if (topicLevels[i] in filter) {
       topicList.push(filter[topicLevels[i]])
     } else {
-      topicList.push("*")
+      topicList.push(appConfig.singleLevelWildCard)
     }
   }
   return `acmeResources/veh_trak/gps/v2/` + topicList.join(topicSeparator)
