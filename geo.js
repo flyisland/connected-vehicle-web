@@ -177,13 +177,17 @@ const geo = {
   drawAllRangeRectangles() {
     if (!showAllRanges) { return }
     for (let range of curtGeoFilterRanges) {
+      const x1 = range.sign.X * range.coord.X
+      const x2 = range.sign.X * (range.coord.X + range.unit.X)
+      const y1 = range.sign.Y * range.coord.Y
+      const y2 = range.sign.Y * (range.coord.Y + range.unit.Y)
       const rect = new google.maps.Rectangle(Object.assign({
         map: map,
         bounds: {
-          north: range.sign.Y > 0 ? range.coord.Y + range.unit.Y : range.coord.Y * -1,
-          south: range.sign.Y > 0 ? range.coord.Y : (range.coord.Y + range.unit.Y) * -1,
-          east: range.sign.X > 0 ? range.coord.X + range.unit.X : range.coord.X * -1,
-          west: range.sign.X > 0 ? range.coord.X : (range.coord.X + range.unit.X) * -1,
+          north: y1 > y2 ? y1 : y2,
+          south: y1 < y2 ? y1 : y2,
+          east: x1 > x2 ? x1 : x2,
+          west: x1 < x2 ? x1 : x2,
         },
       }, subRectangleOptions))
       rangeRectangles.push(rect)
