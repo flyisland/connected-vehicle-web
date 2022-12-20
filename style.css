@@ -198,6 +198,7 @@ body {
 
 .marker-OK {
   filter: drop-shadow(0 0 3mm black);
+  z-index: 10;
 }
 
 @keyframes blink {
@@ -214,5 +215,6 @@ body {
 
 .marker-FAULT {
   filter: drop-shadow(0 0 5px red) brightness(150%) saturate(200%);
-  animation: blink normal 1s infinite ease-in-out; 
+  animation: blink normal 1s infinite ease-in-out;
+  z-index: 1000;
 }
