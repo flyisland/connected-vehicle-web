@@ -22,7 +22,7 @@ const subRectangleOptions = {
 }
 
 const shapes = []
-const rangeRectangles = []
+const curtRangeRectangles = []
 let curtGeoFilterRanges = [];
 let isDragging = false
 let map;
@@ -169,7 +169,7 @@ const geo = {
   },
 
   removeAllRangeRectangles() {
-    for (let rect = rangeRectangles.pop(); 'undefined' != typeof rect; rect = rangeRectangles.pop()) {
+    for (let rect = curtRangeRectangles.pop(); 'undefined' != typeof rect; rect = curtRangeRectangles.pop()) {
       rect.setMap(null)
     }
   },
@@ -190,7 +190,7 @@ const geo = {
           west: x1 < x2 ? x1 : x2,
         },
       }, subRectangleOptions))
-      rangeRectangles.push(rect)
+      curtRangeRectangles.push(rect)
     }
   },
 }
