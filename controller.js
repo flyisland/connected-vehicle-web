@@ -14,7 +14,12 @@ let subTopicTag;
 let coverAccuracyTag;
 let zoomLevel;
 
-const htmlFilteringIDs = ["route", "vehType", "vehID", "status"]
+const filterFields = {
+  route: "*",
+  vehType: "*",
+  vehID: "*",
+  status: "*",
+}
 // vehicleController
 const vc = {
   map: null,
@@ -41,9 +46,9 @@ const vc = {
     zoomLevel = appConfig.mapOptions.zoom
 
     // add event listener of filtering tags
-    htmlFilteringIDs.forEach((eid) => {
+    Object.keys(filterFields).forEach((eid) => {
       const inputTag = document.getElementById(eid)
-      inputTag.addEventListener('change', () => { vc.onFilteringChanged() })
+      inputTag.addEventListener('change', () => { vc.onFilterFieldsChanged() })
     })
 
     vc.getFilteringParameters()
@@ -120,22 +125,21 @@ const vc = {
     }
   },
 
-  onFilteringChanged: function () {
-    const filter = {}
-    htmlFilteringIDs.forEach((eid) => {
+  onFilterFieldsChanged: function () {
+    Object.keys(filterFields).forEach((eid) => {
       const inputTag = document.getElementById(eid)
       if (null == inputTag) {
-        filter[eid] = appConfig.singleLevelWildCard
+        filterFields[eid] = appConfig.singleLevelWildCard
         return
       }
       const value = inputTag.value.trim()
       if (value.length == 0) {
-        filter[eid] = appConfig.singleLevelWildCard
+        filterFields[eid] = appConfig.singleLevelWildCard
       } else {
-        filter[eid] = value
+        filterFields[eid] = value
       }
     })
-    const subTopic = buildSubscriptionTopic(filter)
+    const subTopic = buildSubscriptionTopic(filterFields)
     vc.subscribeTo(subTopic)
   },
 
