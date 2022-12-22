@@ -14,6 +14,7 @@ let subTopicTag;
 let coverAccuracyTag;
 let zoomLevel;
 
+const htmlFilteringIDs = ["route", "vehType", "vehID", "status"]
 // vehicleController
 const vc = {
   map: null,
@@ -28,7 +29,7 @@ const vc = {
     geo.init(vc.map, vc.onShapesChanged)
   },
 
-  htmlFilteringIDs: ["route", "vehType", "vehID", "status"],
+
   init: function () {
     topicTag = document.getElementById("topic")
     msgRateTag = document.getElementById("msg_rate")
@@ -40,7 +41,7 @@ const vc = {
     zoomLevel = appConfig.mapOptions.zoom
 
     // add event listener of filtering tags
-    vc.htmlFilteringIDs.forEach((eid) => {
+    htmlFilteringIDs.forEach((eid) => {
       const inputTag = document.getElementById(eid)
       inputTag.addEventListener('change', () => { vc.onFilteringChanged() })
     })
@@ -121,7 +122,7 @@ const vc = {
 
   onFilteringChanged: function () {
     const filter = {}
-    vc.htmlFilteringIDs.forEach((eid) => {
+    htmlFilteringIDs.forEach((eid) => {
       const inputTag = document.getElementById(eid)
       if (null == inputTag) {
         filter[eid] = appConfig.singleLevelWildCard
