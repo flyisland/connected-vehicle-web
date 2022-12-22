@@ -24,12 +24,12 @@ const subRectangleOptions = {
 const shapes = []
 const curtRangeRectangles = []
 let curtGeoFilterRanges = [];
-let isDragging = false
+let isDragging = false // the user is dragging the shapes now
 let map;
 let drawingManager;
-let cancelDrawing = false
+let cancelDrawing = false // the use press ESC to cancel current shape
 let onShapesChanged
-let showAllRanges = false
+let showAllRanges = false // whether to show ranged rectangles
 
 const geo = {
   init: function (_map, _requestGeoFiltering) {
