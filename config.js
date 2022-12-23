@@ -18,6 +18,9 @@ const config = {
     streetViewControl: false,
     scaleControl: true,
     drawable: true,
+    mapTypeControlOptions: {
+      position: 3, //"TOP_RIGHT"
+    }
   },
 
   singleLevelWildCard: "*",
