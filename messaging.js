@@ -13,6 +13,7 @@ let session // message session
 let onMessage // callback
 
 var msgController = {
+  clientName: "",
   connect: function (onConnected, _onMessage) {
     onMessage = _onMessage
     log.info('Connecting to Solace PubSub+ Event Broker using url: ' + appConfig.solace.SessionProperties.url);
@@ -28,6 +29,7 @@ var msgController = {
     const that = this
     session.on(solace.SessionEventCode.UP_NOTICE, function (sessionEvent) {
       log.info('=== Successfully connected and ready to subscribe. ===');
+      msgController.clientName = session.getSessionProperties().clientName
       setTimeout(() => { onConnected() }, 0);
     });
     session.on(solace.SessionEventCode.CONNECT_FAILED_ERROR, function (sessionEvent) {

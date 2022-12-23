@@ -160,6 +160,7 @@ const vc = {
       const subTopic = buildSubscriptionTopic(filterFields)
       subTopicTag.innerHTML = colorTopic(subTopic)
       let request = {
+        clientName: msgController.clientName,
         maxRangeCount: parseInt(document.getElementById("sub_max_range").value.trim()),
         minAccuracy: parseInt(document.getElementById("sub_accuracy").value.trim()),
         singleLevelWildCard: appConfig.singleLevelWildCard,
