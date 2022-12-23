@@ -28,13 +28,13 @@ let isDragging = false // the user is dragging the shapes now
 let map;
 let drawingManager;
 let cancelDrawing = false // the use press ESC to cancel current shape
-let onShapesChanged
+let onFilteringShapesChanged
 let showAllRanges = false // whether to show ranged rectangles
 
 const geo = {
-  init: function (_map, _requestGeoFiltering) {
+  init: function (_map, _onShapesChanged) {
     map = _map
-    onShapesChanged = _requestGeoFiltering
+    onFilteringShapesChanged = _onShapesChanged
     geo.setupDrawingManager()
 
     document.getElementById("btn-circle").addEventListener('click',
@@ -151,15 +151,15 @@ const geo = {
       }
       result.push(shapeObj)
     })
-    onShapesChanged(result)
+    onFilteringShapesChanged(result)
   },
 
   removeAllShapes() {
     for (let shape = shapes.pop(); 'undefined' != typeof shape; shape = shapes.pop()) {
       shape.setMap(null)
     }
-    // TODO: onShapesChanged([]) to remove all subscriptions
     geo.removeAllRangeRectangles()
+    onFilteringShapesChanged([])
   },
 
   updateRangeRectangles(ranges) {

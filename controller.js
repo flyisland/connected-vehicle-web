@@ -51,10 +51,10 @@ const vc = {
       inputTag.addEventListener('change', () => { vc.onFilterFieldsChanged() })
     })
 
-    vc.getFilteringParameters()
     document.getElementById("sub-form").addEventListener('change', () => {
-      vc.getFilteringParameters()
-      vc.requestGeoFiltering()
+      if (vc.shapes.length !== 0) {
+        vc.updateSubscription()
+      }
     })
   },
 
@@ -128,19 +128,46 @@ const vc = {
   onFilterFieldsChanged: function () {
     Object.keys(filterFields).forEach((eid) => {
       const inputTag = document.getElementById(eid)
-      if (null == inputTag) {
+      if (null === inputTag) {
         filterFields[eid] = appConfig.singleLevelWildCard
         return
       }
       const value = inputTag.value.trim()
-      if (value.length == 0) {
+      if (value.length === 0) {
         filterFields[eid] = appConfig.singleLevelWildCard
       } else {
         filterFields[eid] = value
       }
     })
-    const subTopic = buildSubscriptionTopic(filterFields)
-    vc.subscribeTo(subTopic)
+    vc.updateSubscription()
+  },
+
+  updateSubscription() {
+    if (vc.shapes.length === 0) {
+      filterFields["lat"] = "*"
+      filterFields["lng"] = "*"
+      const subTopic = buildSubscriptionTopic(filterFields)
+      vc.subscribeTo(subTopic)
+    } else {
+      // geo-filtering
+      filterFields["lat"] = "{lat}"
+      filterFields["lng"] = "{lng}"
+      if (vc.curtSubTopic !== null) {
+        vc.subscribeTo(null)
+      }
+      const subTopic = buildSubscriptionTopic(filterFields)
+      subTopicTag.innerHTML = colorTopic(subTopic)
+      let request = {
+        maxRangeCount: parseInt(document.getElementById("sub_max_range").value.trim()),
+        minAccuracy: parseInt(document.getElementById("sub_accuracy").value.trim()),
+        singleLevelWildCard: appConfig.singleLevelWildCard,
+        topic: subTopic,
+        shapes: vc.shapes,
+      }
+      log.debug(JSON.stringify(request))
+      msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC,
+        JSON.stringify(request), vc.onGeoFilteringResult)
+    }
   },
 
   curtSubTopic: null,
@@ -165,30 +192,10 @@ const vc = {
     vc.subscribeTo(buildSubscriptionTopic({}))
   },
 
-  shapes: null,
+  shapes: [],
   onShapesChanged(_shapes) {
     vc.shapes = _shapes
-    vc.requestGeoFiltering()
-  },
-
-  subMaxRange: null,
-  subAccuracy: null,
-  getFilteringParameters() {
-    vc.subMaxRange = parseInt(document.getElementById("sub_max_range").value.trim())
-    vc.subAccuracy = parseInt(document.getElementById("sub_accuracy").value.trim())
-  },
-
-  requestGeoFiltering() {
-    if ((vc.shapes === null) || (vc.shapes.length === 0)) { return }
-    let request = {
-      maxRangeCount: vc.subMaxRange,
-      minAccuracy: vc.subAccuracy,
-      singleLevelWildCard: appConfig.singleLevelWildCard,
-      shapes: vc.shapes,
-    }
-    log.debug(JSON.stringify(request))
-    msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC,
-      JSON.stringify(request), vc.onGeoFilteringResult)
+    vc.updateSubscription()
   },
 
   onGeoFilteringResult(payload) {
