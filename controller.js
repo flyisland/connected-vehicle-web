@@ -163,7 +163,7 @@ const vc = {
         maxRangeCount: parseInt(document.getElementById("sub_max_range").value.trim()),
         minAccuracy: parseInt(document.getElementById("sub_accuracy").value.trim()),
         singleLevelWildCard: appConfig.singleLevelWildCard,
-        topic: subTopic,
+        topicPattern: subTopic,
         shapes: geoShapes,
       }
       log.debug(JSON.stringify(request))
@@ -203,7 +203,7 @@ const vc = {
     let reply = JSON.parse(payload)
     curtSubsTag.innerText = reply.ranges.length
     coverAccuracyTag.innerText = (reply.accuracy * 100).toFixed(2)
-    geo.updateRangeRectangles(reply.ranges)
+    geo.updateRangeRectangles(reply)
   },
 }
 

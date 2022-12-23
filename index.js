@@ -29,7 +29,7 @@ document.getElementById("topic-pattern").innerHTML =
     vehID: "{vehID}",
     lat: "{lat}",
     lng: "{lng}",
-    heading: "{dir}",
+    dir: "{dir}",
     status: "{status}",
   }))
 

@@ -218,3 +218,9 @@ body {
   animation: blink normal 1s infinite ease-in-out;
   z-index: 1000;
 }
+
+#range-rect {
+  position: absolute;
+  top: auto;
+  display: none;
+}

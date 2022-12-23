@@ -1,3 +1,5 @@
+import { colorTopic } from "./misc.js"
+
 const strokeColor = '#F71'
 const shapeOptions = {
   strokeColor: strokeColor,
@@ -23,7 +25,7 @@ const subRectangleOptions = {
 
 const shapes = []
 const curtRangeRectangles = []
-let curtGeoFilterRanges = [];
+let curtGeoFilterReply
 let isDragging = false // the user is dragging the shapes now
 let map;
 let drawingManager;
@@ -31,6 +33,9 @@ let cancelDrawing = false // the use press ESC to cancel current shape
 let onFilteringShapesChanged
 let showAllRanges = false // whether to show ranged rectangles
 
+
+let rangRectTag
+let rangeTopicTag
 const geo = {
   init: function (_map, _onShapesChanged) {
     map = _map
@@ -54,6 +59,9 @@ const geo = {
         geo.removeAllRangeRectangles()
       }
     })
+
+    rangRectTag = document.getElementById("range-rect")
+    rangeTopicTag = document.getElementById("range-topic")
   },
 
   closeDrawingManager() {
@@ -162,9 +170,9 @@ const geo = {
     onFilteringShapesChanged([])
   },
 
-  updateRangeRectangles(ranges) {
+  updateRangeRectangles(reply) {
     geo.removeAllRangeRectangles()
-    curtGeoFilterRanges = ranges
+    curtGeoFilterReply = reply
     geo.drawAllRangeRectangles()
   },
 
@@ -176,7 +184,10 @@ const geo = {
 
   drawAllRangeRectangles() {
     if (!showAllRanges) { return }
-    for (let range of curtGeoFilterRanges) {
+    if (curtGeoFilterReply === null) { return }
+    if (!("ranges" in curtGeoFilterReply)) { return }
+    for (let i = 0; i < curtGeoFilterReply.ranges.length; i++) {
+      const range = curtGeoFilterReply.ranges[i]
       const x1 = range.sign.X * range.coord.X
       const x2 = range.sign.X * (range.coord.X + range.unit.X)
       const y1 = range.sign.Y * range.coord.Y
@@ -190,6 +201,24 @@ const geo = {
           west: x1 < x2 ? x1 : x2,
         },
       }, subRectangleOptions))
+      const temp = curtGeoFilterReply.topicPattern.replace('{lat}', range.filtering.Y)
+      rect["topic"] = temp.replace("{lng}", range.filtering.X)
+
+      rect.addListener("mouseover", function () {
+        rect.setOptions({ fillOpacity: 0.1, strokeOpacity: 1 });
+        rangeTopicTag.innerHTML = colorTopic(rect["topic"])
+        rangRectTag.style.display = "block"
+      });
+      rect.addListener("mousemove", function (event) {
+        rangRectTag.style.left = (event.domEvent.x + 10) + 'px';
+        rangRectTag.style.top = (event.domEvent.y + 10) + 'px';
+      });
+      rect.addListener("mouseout", function () {
+        rect.setOptions({ fillOpacity: 0.05, strokeOpacity: 0.5 });
+        rangRectTag.style.display = "none"
+      });
+
+
       curtRangeRectangles.push(rect)
     }
   },
