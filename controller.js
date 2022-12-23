@@ -20,6 +20,8 @@ const filterFields = {
   vehID: "*",
   status: "*",
 }
+let geoShapes = []
+
 // vehicleController
 const vc = {
   map: null,
@@ -52,7 +54,7 @@ const vc = {
     })
 
     document.getElementById("sub-form").addEventListener('change', () => {
-      if (vc.shapes.length !== 0) {
+      if (geoShapes.length !== 0) {
         vc.updateSubscription()
       }
     })
@@ -143,7 +145,7 @@ const vc = {
   },
 
   updateSubscription() {
-    if (vc.shapes.length === 0) {
+    if (geoShapes.length === 0) {
       filterFields["lat"] = "*"
       filterFields["lng"] = "*"
       const subTopic = buildSubscriptionTopic(filterFields)
@@ -162,7 +164,7 @@ const vc = {
         minAccuracy: parseInt(document.getElementById("sub_accuracy").value.trim()),
         singleLevelWildCard: appConfig.singleLevelWildCard,
         topic: subTopic,
-        shapes: vc.shapes,
+        shapes: geoShapes,
       }
       log.debug(JSON.stringify(request))
       msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC,
@@ -192,9 +194,8 @@ const vc = {
     vc.subscribeTo(buildSubscriptionTopic({}))
   },
 
-  shapes: [],
   onShapesChanged(_shapes) {
-    vc.shapes = _shapes
+    geoShapes = _shapes
     vc.updateSubscription()
   },
 
