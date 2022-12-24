@@ -21,6 +21,11 @@ const filterFields = {
   status: "*",
 }
 let geoShapes = []
+const SUB_MODE_WILDCARD = "wildcard"
+const SUB_MODE_GEO = "geo"
+let prevSubMode = SUB_MODE_WILDCARD
+let prevSubTopic = null
+let prevFilteringResult = null
 
 // vehicleController
 const vc = {
@@ -145,54 +150,49 @@ const vc = {
   },
 
   updateSubscription() {
+    // un-subscribe prev wildcard topic first
+    if (prevSubTopic !== null) {
+      msgController.unSubscribe(prevSubTopic)
+      prevSubTopic = null
+    }
+    let curtSubMode = SUB_MODE_WILDCARD
     if (geoShapes.length === 0) {
       filterFields["lat"] = "*"
       filterFields["lng"] = "*"
-      const subTopic = buildSubscriptionTopic(filterFields)
-      vc.subscribeTo(subTopic)
     } else {
-      // geo-filtering
+      curtSubMode = SUB_MODE_GEO
       filterFields["lat"] = "{lat}"
       filterFields["lng"] = "{lng}"
-      if (vc.curtSubTopic !== null) {
-        vc.subscribeTo(null)
-      }
-      const subTopic = buildSubscriptionTopic(filterFields)
-      subTopicTag.innerHTML = colorTopic(subTopic)
+    }
+    const subTopic = buildSubscriptionTopic(filterFields)
+    subTopicTag.innerHTML = colorTopic(subTopic)
+
+    if (curtSubMode === SUB_MODE_WILDCARD) {
+      msgController.subscribeTo(subTopic)
+      prevSubTopic = subTopic
+      curtSubsTag.innerText = "1"
+    }
+    if (prevSubMode === SUB_MODE_GEO || curtSubMode === SUB_MODE_GEO) {
+      // prevSubMode === SUB_MODE_GEO -> need to un-subscribe previous ranges
       let request = {
         clientName: msgController.clientName,
         maxRangeCount: parseInt(document.getElementById("sub_max_range").value.trim()),
         minAccuracy: parseInt(document.getElementById("sub_accuracy").value.trim()),
         singleLevelWildCard: appConfig.singleLevelWildCard,
         topicPattern: subTopic,
+        prevResult: prevFilteringResult,
         shapes: geoShapes,
       }
-      log.debug(JSON.stringify(request))
       msgController.sendRequest(GEO_FILTERING_REQUEST_TOPIC,
         JSON.stringify(request), vc.onGeoFilteringResult)
+      prevFilteringResult = null
     }
+    prevSubMode = curtSubMode
   },
 
-  curtSubTopic: null,
-  // topicList: a list to string, or string if only one topic to subscribe to
-  subscribeTo: function (topic) {
-    log.debug(`subscribeTo(${topic})`)
-    // un-subscribe first
-    if (vc.curtSubTopic !== null) {
-      msgController.unSubscribe(vc.curtSubTopic)
-      vc.curtSubTopic = null
-    }
-
-    if (topic !== null) {
-      msgController.subscribeTo(topic)
-      vc.curtSubTopic = topic
-      curtSubsTag.innerText = "1"
-      subTopicTag.innerHTML = colorTopic(vc.curtSubTopic)
-    }
-  },
 
   onMessagingConnected: function () {
-    vc.subscribeTo(buildSubscriptionTopic({}))
+    vc.updateSubscription()
   },
 
   onShapesChanged(_shapes) {
@@ -202,9 +202,14 @@ const vc = {
 
   onGeoFilteringResult(payload) {
     let reply = JSON.parse(payload)
-    curtSubsTag.innerText = reply.ranges.length
-    coverAccuracyTag.innerText = (reply.accuracy * 100).toFixed(2)
-    geo.updateRangeRectangles(reply)
+    if (reply.ranges.length > 0) {
+      prevFilteringResult = reply
+      curtSubsTag.innerText = reply.ranges.length
+      coverAccuracyTag.innerText = (reply.accuracy * 100).toFixed(2)
+      geo.updateRangeRectangles(reply)
+    } else {
+      coverAccuracyTag.innerText = "0"
+    }
   },
 }
 

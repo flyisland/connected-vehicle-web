@@ -61,13 +61,13 @@ var msgController = {
 
   subscribeTo: function (topicName) {
     try {
+      log.info('Subscribe to topic: ' + topicName);
       session.subscribe(
         solace.SolclientFactory.createTopicDestination(topicName),
         true, // generate confirmation when subscription is added successfully
         topicName, // use topic name as correlation key
         10000 // 10 seconds timeout for this operation
       );
-      log.info('Subscribe to topic: ' + topicName);
     } catch (error) {
       log.error(error.toString());
     }
@@ -75,13 +75,13 @@ var msgController = {
 
   unSubscribe: function (topicName) {
     try {
+      log.info('Un-Subscribe topic: ' + topicName);
       session.unsubscribe(
         solace.SolclientFactory.createTopicDestination(topicName),
         true, // generate confirmation when subscription is added successfully
         topicName, // use topic name as correlation key
         10000 // 10 seconds timeout for this operation
       );
-      log.info('Un-Subscribe topic: ' + topicName);
     } catch (error) {
       log.error(error.toString());
     }
