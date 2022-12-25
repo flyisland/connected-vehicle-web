@@ -86,6 +86,7 @@ This web front is just a bunch of static files, you could put it under any web s
 
 For example, you could run the command `python -m http.server 9010` under the root folder of the project, then access the demo by http://localhost:9010/.
 
-## TODO
+## Features
 
-- [ ] Add support of GEO filtering
+- [x] Vehicles with FAULT status
+- [x] Support of GEO filtering
