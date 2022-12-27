@@ -36,7 +36,7 @@ function buildSubscriptionTopic(filter) {
       topicList.push(appConfig.singleLevelWildCard)
     }
   }
-  return `acmeResources/veh_trak/gps/v2/` + topicList.join(topicSeparator)
+  return appConfig.topicPrefix + topicList.join(topicSeparator)
 }
 
 export { colorTopic, buildSubscriptionTopic }

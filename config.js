@@ -2,6 +2,8 @@ const config = {
   //"trace","debug","info","warn","error"
   logLevel: "debug",
 
+  // acmeResources/veh_trak/gps/v2/{route}/{vehType}/{vehID}/{lat}/{lng}/{dir}/{status}
+  topicPrefix: "acmeResources/veh_trak/gps/v2/",
   title: "Real-time Connected Mining Demo",
   subTitles: [
     "Bidirectional IoT Communication using MQTT",
