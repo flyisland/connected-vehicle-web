@@ -10,7 +10,7 @@ const config = {
     "Advanced Filtering and Routing Capabilities"
   ],
 
-  googleApiKey: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX",
+  googleApiKey: "AIzaSyCfUpei863cqkmQvV9KavBsjybNQ4hr6wA",
   mapOptions: {
     center: { lat: -23.3644177610712, lng: 119.67464837435948 }, // Newman Mine Site
     zoom: 16,
