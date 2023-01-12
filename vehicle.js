@@ -51,7 +51,7 @@ export default class Vehicle {
   onZoomChanged(zoomLevel) {
     let bodyLength = this.typeConfig.bodyLength
     // when (zoomLevel < 18), double the vehicle length
-    if (zoomLevel < 18) { bodyLength = bodyLength * 2 }
+    if (zoomLevel < 17) { bodyLength = bodyLength * 2 }
     // when (zoomLevel < 15), the icon's size is too small, so we keep the
     // icon's size at least on zoomLevel 15
     if (zoomLevel < 15) { zoomLevel = 15 }
