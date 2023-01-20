@@ -54,6 +54,12 @@ const config = {
       bodyLength: 15, // meters
       infoImage: "water-truck-info.png"
     },
+    ORECAR: {
+      reportInterval: 3, // seconds
+      icon: "orecar.svg",
+      bodyLength: 15, // meters
+      infoImage: "ore-car-info.jpg"
+    },
   }
 }
 
