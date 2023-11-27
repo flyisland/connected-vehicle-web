@@ -4,13 +4,13 @@
 
 ![Screen Shot](./images/cover.avif)
 
-This is basically a copy and refactoring of [Aaron](https://github.com/aaron-613)'s amazing [Real-time Connected Buses Demo](https://sg.solace.com/bus/). The main purpose of the refactoring is to make the application more configurable.
+A highly configurable connected vehicle demo that allows users easily to build real-time connected Things demos on Google map for specific situations
 
-Together with the [data-generator](../../../connected-vehicle-data-generator/) and [geo-filtering](../../../geo-filtering/) projects, you'd be able to customize the route's path, the speed of the vehicles, and the icon and picture of each vehicle type. It will let you more easily to build a real-time connected **Things** demo on the google map for a particular situation, for example a connected Bike demo of the San Francisco city, or even a connected Boat demo of the Hong Kong city.
+Together with the [data-generator](../../../connected-vehicle-data-generator/) and [geo-filtering](../../../geo-filtering/) projects, you'd be able to customize the route's path, the speed of the vehicles, and the icon and picture of each vehicle type. It will let you more easily build a real-time connected **Things** demo on Google Maps for a particular situation, for example, a connected Bike demo of San Francisco city, or even a connected Boat demo of Hong Kong city.
 
 ## Configuration Guide
 
-You could setup icon and picture for each vehicle type in this project, please check the [data-generator](../../../connected-vehicle-data-generator/) project for customization of routes.
+You could set up icons and pictures for each vehicle type in this project, please check the [data-generator](../../../connected-vehicle-data-generator/) project for customization of routes.
 
 File [config.js](./config.js) is where we write the configuration:
 
